@@ -11,8 +11,15 @@ public class Book {
     private String isbn;
     private float price;
 
-    public Book(int id, String title, String author, String isbn, float price) {
-        this.id = id;
+    /**
+     * Book class constructor; creates a new Book object with a title, author, ISBN and a price.
+     *
+     * @param title The title of the book
+     * @param author The book's author
+     * @param isbn The unique ISBN for the book
+     * @param price The price of the book at the bookstore
+     */
+    public Book(String title, String author, String isbn, float price) {
         this.title = title;
         this.author = author;
         this.isbn = isbn;
