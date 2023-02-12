@@ -13,6 +13,6 @@ public class BookController {
 
     @GetMapping("/books")
     public Book getBook(@RequestParam Integer id) {
-        return new Book();
+        return dao.getBookWithId(id);
     }
 }
