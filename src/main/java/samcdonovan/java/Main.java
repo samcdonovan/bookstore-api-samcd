@@ -1,9 +1,17 @@
 package samcdonovan.java;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 import java.util.Scanner;
 
+@SpringBootApplication
 public class Main {
     public static void main(String[] args) {
+
+        SpringApplication.run(Main.class, args);
+
+        /*
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Welcome to the Frog Bookstore API!");
@@ -25,6 +33,6 @@ public class Main {
 
         }
         scanner.close();
-
+      */
     }
 }
