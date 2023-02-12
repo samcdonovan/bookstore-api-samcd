@@ -32,7 +32,7 @@ public class BookDAO {
     /**
      * Retrieves all books from the database
      *
-     * @return List A list containing all of the books
+     * @return List A list containing all the books
      */
     public List<Book> getAllBooks(){
         return this.bookList;
