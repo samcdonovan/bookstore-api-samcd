@@ -67,7 +67,7 @@
                     <!-- MainClass in manifest to make an executable jar -->
                     <archive>
                         <manifest>
-                            <mainClass>samcdonovan.java.Main</mainClass>
+                            <mainClass>samcdonovan.java.ApplicationRunner</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
