@@ -19,7 +19,22 @@ public class BookDAO {
         bookList.add(new Book("Test 4", "Test 4", "123123123126", 5.5));
     }
 
+    /**
+     * Retrieves a book with a specific ID
+     *
+     * @param id The ID of the book
+     * @return Book The book from the database with the specified ID
+     */
     public Book getBookWithId(int id){
         return bookList.get(0);
+    }
+
+    /**
+     * Retrieves all books from the database
+     *
+     * @return List A list containing all of the books
+     */
+    public List<Book> getAllBooks(){
+        return this.bookList;
     }
 }
