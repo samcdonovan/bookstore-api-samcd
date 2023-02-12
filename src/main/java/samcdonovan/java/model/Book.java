@@ -9,7 +9,7 @@ public class Book {
     private String title;
     private String author;
     private String isbn;
-    private float price;
+    private double price;
 
     /**
      * Book class constructor; creates a new Book object with a title, author, ISBN and a price.
@@ -19,7 +19,7 @@ public class Book {
      * @param isbn The unique ISBN for the book
      * @param price The price of the book at the bookstore
      */
-    public Book(String title, String author, String isbn, float price) {
+    public Book(String title, String author, String isbn, double price) {
         this.title = title;
         this.author = author;
         this.isbn = isbn;
@@ -43,7 +43,7 @@ public class Book {
         return this.isbn;
     }
 
-    public float getPrice() {
+    public double getPrice() {
         return this.price;
     }
 
