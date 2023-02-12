@@ -1,14 +1,18 @@
 package samcdonovan.java.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 import samcdonovan.java.model.Book;
+import samcdonovan.java.model.BookDAO;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class BookController {
 
-    @GetMapping("/books")
-    public Book getBook() {
+    private BookDAO dao;
 
+    @GetMapping("/books")
+    public Book getBook(@RequestParam Integer id) {
+        return new Book();
     }
 }

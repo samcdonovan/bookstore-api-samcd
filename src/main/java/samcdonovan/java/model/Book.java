@@ -1,5 +1,8 @@
 package samcdonovan.java.model;
 
+/**
+ * Book class containing data about each book in the database
+ */
 public class Book {
 
     private int id;
