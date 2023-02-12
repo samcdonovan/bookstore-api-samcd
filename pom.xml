@@ -40,6 +40,7 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- H2 database for storing books -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
@@ -63,7 +64,7 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
-                    <!-- MainClass in manifest make a executable jar -->
+                    <!-- MainClass in manifest to make an executable jar -->
                     <archive>
                         <manifest>
                             <mainClass>samcdonovan.java.Main</mainClass>
