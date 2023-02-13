@@ -11,11 +11,22 @@ import java.util.List;
  */
 public class BookDAO {
 
-    private Connection connection;
+    private Connection connection; // SQL connection variable
 
+    /**
+     * Empty constructor
+     */
     public BookDAO() {
     }
 
+    /**
+     * Helper function to set up a H2 connection and then
+     * run the specified query.
+     *
+     * @param query SQL query to run through H2
+     * @return ResultSet The result from running the SQL query
+     * @throws SQLException
+     */
     public ResultSet runH2Query(String query) throws SQLException {
         String jdbcURL = "jdbc:h2:mem:bookstoredb";
         String username = "sa";
@@ -28,6 +39,14 @@ public class BookDAO {
         return statement.executeQuery(query);
     }
 
+    /**
+     * Helper function that maps a ResultSet (from an SQL query)
+     * into a book object.
+     *
+     * @param resultSet The result produce from running an SQL query
+     * @return Book A book object containing the data from the query
+     * @throws SQLException
+     */
     public Book mapToBook(ResultSet resultSet) throws SQLException {
         Book book = new Book();
 
