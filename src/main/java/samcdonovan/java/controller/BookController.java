@@ -1,11 +1,13 @@
 package samcdonovan.java.controller;
 
+import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import samcdonovan.java.model.Book;
 import samcdonovan.java.service.BookDAO;
 
+import javax.sound.midi.SysexMessage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,6 +75,15 @@ public class BookController {
         }
         return list;
     }
+
+    @PutMapping("/books/{id}")
+    public void updateBook(@RequestBody Book book, @PathVariable("id") Integer id) {
+        try {
+            dao.updateBook(book, id);
+        } catch(Exception exception){
+            System.out.println(exception);
+    }
+}
 
 
 }

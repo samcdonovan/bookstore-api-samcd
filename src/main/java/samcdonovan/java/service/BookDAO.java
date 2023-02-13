@@ -141,4 +141,26 @@ public class BookDAO {
         return book;
     }
 
+    public Book updateBook(Book book, int id) throws SQLException {
+        String jdbcURL = "jdbc:h2:mem:bookstoredb";
+        String username = "sa";
+        String password = "";
+
+        this.connection = DriverManager.getConnection(jdbcURL, username, password);
+        System.out.println("H2 connection has started!");
+
+        Statement statement = connection.createStatement();
+        Book updatedBook = new Book();
+
+        statement.execute("UPDATE books SET title='" + book.getTitle() +
+                "', author='" + book.getAuthor() + "', isbn='" + book.getIsbn() +
+                "', price=" + book.getPrice() + " WHERE id=" + id);
+
+
+        this.connection.close();
+
+
+        return updatedBook;
+    }
+
 }
