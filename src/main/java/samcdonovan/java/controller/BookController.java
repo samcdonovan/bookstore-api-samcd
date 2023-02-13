@@ -1,11 +1,9 @@
 package samcdonovan.java.controller;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import samcdonovan.java.model.Book;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import samcdonovan.java.service.BookDAO;
 
 import java.util.ArrayList;
@@ -20,6 +18,16 @@ import java.util.List;
 public class BookController {
 
     BookDAO dao = new BookDAO();
+
+    @PostMapping("/books")
+    public ResponseEntity<Book> addBook(@RequestBody Book book) {
+        try {
+            Book newBook = dao.addBook(book);
+            return new ResponseEntity<>(newBook, HttpStatus.CREATED);
+        } catch (Exception exception) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     /**
      * GET path for books with a specific ID.
@@ -54,4 +62,6 @@ public class BookController {
         }
         return list;
     }
+
+
 }

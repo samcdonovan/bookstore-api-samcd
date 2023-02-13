@@ -11,7 +11,34 @@ import java.util.List;
  */
 public class BookDAO {
 
-    public BookDAO(){    }
+    private Connection connection;
+
+    public BookDAO() {
+    }
+
+    public ResultSet runH2Query(String query) throws SQLException {
+        String jdbcURL = "jdbc:h2:mem:bookstoredb";
+        String username = "sa";
+        String password = "";
+
+        this.connection = DriverManager.getConnection(jdbcURL, username, password);
+
+        Statement statement = connection.createStatement();
+
+        return statement.executeQuery(query);
+    }
+
+    public Book mapToBook(ResultSet resultSet) throws SQLException {
+        Book book = new Book();
+
+        book.setId(resultSet.getInt("id"));
+        book.setTitle(resultSet.getString("title"));
+        book.setAuthor(resultSet.getString("author"));
+        book.setIsbn(resultSet.getString("isbn"));
+        book.setPrice(resultSet.getDouble("price"));
+
+        return book;
+    }
 
     /**
      * Retrieves a book with a specific ID
@@ -21,65 +48,52 @@ public class BookDAO {
      */
     public Book findById(int id) throws SQLException {
 
-        String jdbcURL = "jdbc:h2:mem:bookstoredb";
-        String username = "sa";
-        String password = "";
+        ResultSet resultSet = runH2Query("SELECT * FROM books WHERE id=" + id);
 
-        Connection connection = DriverManager.getConnection(jdbcURL, username, password);
-        System.out.println("Connected to H2 in server mode.");
-
-        String sql = "SELECT * FROM books WHERE id=" + id;
-
-        Statement statement = connection.createStatement();
-
-        ResultSet resultSet = statement.executeQuery(sql);
-
-        Book book = new Book();
-
-        while(resultSet.next()){
-            book.setId(resultSet.getInt("id"));
-            book.setTitle(resultSet.getString("title"));
-            book.setAuthor(resultSet.getString("author"));
-            book.setIsbn(resultSet.getString("isbn"));
-            book.setPrice(resultSet.getDouble("price"));
+        Book book = null;
+        try {
+            while (resultSet.next()) {
+                book = mapToBook(resultSet);
+            }
+        } catch (Exception exception) {
+            System.out.println(exception);
+        } finally {
+            this.connection.close();
         }
-
-        connection.close();
 
         return book;
     }
+
 
     /**
      * Retrieves all books from the database
      *
      * @return List A list containing all the books
      */
-    public List<Book> findAll() throws SQLException{
-        String jdbcURL = "jdbc:h2:mem:bookstoredb";
-        String username = "sa";
-        String password = "";
+    public List<Book> findAll() throws SQLException {
 
-        Connection connection = DriverManager.getConnection(jdbcURL, username, password);
-
-        String sql = "SELECT * FROM books";
-
-        Statement statement = connection.createStatement();
-
-        ResultSet resultSet = statement.executeQuery(sql);
+        ResultSet resultSet = runH2Query("SELECT * FROM books");
 
         Book book = new Book();
         List<Book> bookList = new ArrayList<>();
-        while(resultSet.next()){
-            book = new Book();
-            book.setId(resultSet.getInt("id"));
-            book.setTitle(resultSet.getString("title"));
-            book.setAuthor(resultSet.getString("author"));
-            book.setIsbn(resultSet.getString("isbn"));
-            book.setPrice(resultSet.getDouble("price"));
-            bookList.add(book);
+
+        try {
+            while (resultSet.next()) {
+                book = mapToBook(resultSet);
+                bookList.add(book);
+            }
+        } catch (Exception exception) {
+            System.out.println(exception);
+        } finally {
+            this.connection.close();
         }
 
-        connection.close();
         return bookList;
+    }
+
+    public Book addBook(Book book) {
+        Book newBook = new Book();
+
+        return newBook;
     }
 }
