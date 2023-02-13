@@ -48,8 +48,8 @@ public class BookController {
      * @param id The database ID of the book
      * @return Book The book retrieved from the database
      */
-    @GetMapping(value = "/books", params = "id")
-    public Book getBook(@RequestParam Integer id) {
+    @GetMapping("/books/{id}")
+    public Book getBook(@PathVariable Integer id) {
         Book book = null;
         try {
             book = dao.findById(id);
