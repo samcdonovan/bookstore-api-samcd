@@ -163,4 +163,21 @@ public class BookDAO {
         return updatedBook;
     }
 
+    public void deleteBookById(int id) throws SQLException{
+        String jdbcURL = "jdbc:h2:mem:bookstoredb";
+        String username = "sa";
+        String password = "";
+
+        this.connection = DriverManager.getConnection(jdbcURL, username, password);
+        System.out.println("H2 connection has started!");
+
+        Statement statement = connection.createStatement();
+
+        statement.execute("DELETE FROM books WHERE id=" + id);
+
+        this.connection.close();
+
+
+    }
+
 }

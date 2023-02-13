@@ -80,9 +80,18 @@ public class BookController {
     public void updateBook(@RequestBody Book book, @PathVariable("id") Integer id) {
         try {
             dao.updateBook(book, id);
-        } catch(Exception exception){
+        } catch (Exception exception) {
             System.out.println(exception);
+        }
     }
+
+    @DeleteMapping("/books/{id}")
+    public void deleteBook(@PathVariable("id") Integer id){
+        try{
+            dao.deleteBookById(id);
+        } catch (Exception exception){
+            System.out.println(exception);
+        }
 }
 
 
