@@ -98,7 +98,7 @@ public class BookController {
      *
      * @param book The request body for a PUT request containing information
      *             about the book to be updated.
-     * @param id   The ID of the book to be updated
+     * @param id The ID of the book to be updated
      */
     @PutMapping("/books/{id}")
     public void updateBook(@RequestBody Book book, @PathVariable("id") Integer id) {

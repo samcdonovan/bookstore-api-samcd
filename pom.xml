@@ -58,6 +58,45 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>com.akathist.maven.plugins.launch4j</groupId>
+                <artifactId>launch4j-maven-plugin</artifactId>
+                <version>2.3.0</version>
+                <executions>
+                    <execution>
+                        <id>l4j-gui</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>launch4j</goal>
+                        </goals>
+                        <configuration>
+                            <headerType>gui</headerType>
+                            <outfile>BookstoreAPI.exe</outfile>
+                            <jar>target/${project.artifactId}-${project.version}.jar</jar>
+                            <dontWrapJar>false</dontWrapJar>
+                            <errTitle>Error in launch4j plugin</errTitle>
+                            <classPath>
+                                <mainClass>samcdonovan.java.ApplicationRunner</mainClass>
+                            </classPath>
+                            <icon>Project.ico</icon>
+                            <jre>
+                                <minVersion>1.5.0</minVersion>
+                                <maxVersion>1.6.0</maxVersion>
+                                <initialHeapSize>512</initialHeapSize>
+                                <maxHeapSize>1024</maxHeapSize>
+                            </jre>
+                            <versionInfo>
+                                <fileVersion>1.0.0</fileVersion>
+                                <txtFileVersion>1.0.0</txtFileVersion>
+                                <productVersion>1.0.0</productVersion>
+                                <productName>BookstoreAPI</productName>
+                                <internalName>BookstoreAPI</internalName>
+                                <originalFilename>BookstoreAPI.exe</originalFilename>
+                            </versionInfo>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
