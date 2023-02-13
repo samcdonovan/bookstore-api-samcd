@@ -110,9 +110,16 @@ public class BookDAO {
         return bookList;
     }
 
-    public Book addBook(Book book) {
+    public Book addBook(Book book) throws SQLException {
         Book newBook = new Book();
 
+        String query = "INSERT INTO books VALUES ('" + book.getTitle() + "', '"
+                + book.getAuthor() + "', '" + book.getIsbn() + "', " + book.getPrice() + ")";
+
+        ResultSet resultSet = runH2Query(query);
+
+        newBook = mapToBook(resultSet);
+        
         return newBook;
     }
 }
