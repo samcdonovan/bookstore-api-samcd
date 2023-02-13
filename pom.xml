@@ -78,17 +78,19 @@
                             <classPath>
                                 <mainClass>samcdonovan.java.ApplicationRunner</mainClass>
                             </classPath>
-                            <icon>Project.ico</icon>
+                            <icon>src/main/resources/favicon.ico</icon>
                             <jre>
+                                <path>${java.home}</path>
+                                <!--
                                 <minVersion>1.5.0</minVersion>
                                 <maxVersion>1.6.0</maxVersion>
                                 <initialHeapSize>512</initialHeapSize>
-                                <maxHeapSize>1024</maxHeapSize>
+                                <maxHeapSize>1024</maxHeapSize>-->
                             </jre>
                             <versionInfo>
-                                <fileVersion>1.0.0</fileVersion>
-                                <txtFileVersion>1.0.0</txtFileVersion>
-                                <productVersion>1.0.0</productVersion>
+                                <fileVersion>1.0.0.0</fileVersion>
+                                <txtFileVersion>1.0.0.0</txtFileVersion>
+                                <productVersion>1.0.0.0</productVersion>
                                 <productName>BookstoreAPI</productName>
                                 <internalName>BookstoreAPI</internalName>
                                 <originalFilename>BookstoreAPI.exe</originalFilename>
