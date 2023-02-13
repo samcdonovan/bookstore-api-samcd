@@ -33,6 +33,7 @@ public class BookDAO {
         String password = "";
 
         this.connection = DriverManager.getConnection(jdbcURL, username, password);
+        System.out.println("H2 connection has started!");
 
         Statement statement = connection.createStatement();
 
@@ -111,16 +112,33 @@ public class BookDAO {
     }
 
     public Book addBook(Book book) throws SQLException {
+        String jdbcURL = "jdbc:h2:mem:bookstoredb";
+        String username = "sa";
+        String password = "";
+
+        this.connection = DriverManager.getConnection(jdbcURL, username, password);
+        System.out.println("H2 connection has started!");
+
+        Statement statement = connection.createStatement();
+
         Book newBook = new Book();
 
-        String query = "INSERT INTO books VALUES ('" + book.getTitle() + "', '"
-                + book.getAuthor() + "', '" + book.getIsbn() + "', " + book.getPrice() + ")";
+        String query = "INSERT INTO books (title, author, isbn, price) VALUES " +
+                "('" + book.getTitle() + "', '" + book.getAuthor() + "', '"
+                + book.getIsbn() + "', " + book.getPrice() + ")";
 
-        ResultSet resultSet = runH2Query(query);
+        try {
+            //ResultSet resultSet = runH2Query(query);
 
-        newBook = mapToBook(resultSet);
+            statement.execute(query);
+            //newBook = mapToBook(resultSet);
+        } catch (Exception exception) {
+            System.out.println(exception);
+        } finally {
+            this.connection.close();
+        }
 
-        return newBook;
+        return book;
     }
 
 }

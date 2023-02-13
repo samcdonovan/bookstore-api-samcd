@@ -21,10 +21,13 @@ public class BookController {
 
     @PostMapping("/books")
     public ResponseEntity<Book> addBook(@RequestBody Book book) {
+        System.out.println(book);
         try {
             Book newBook = dao.addBook(book);
+            System.out.println(newBook);
             return new ResponseEntity<>(newBook, HttpStatus.CREATED);
         } catch (Exception exception) {
+            System.out.println(exception);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

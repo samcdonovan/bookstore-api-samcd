@@ -80,11 +80,11 @@ public class Book {
     public String toString() {
         String bookString = "";
 
-        bookString += "ID = " + this.id + "/n";
-        bookString += "Title = " + this.title + "/n";
-        bookString += "Author = " + this.author + "/n";
-        bookString += "ISBN = " + this.isbn + "/n";
-        bookString += "Price = " + this.price + "/n";
+        bookString += "ID = " + this.id + "\n";
+        bookString += "Title = " + this.title + "\n";
+        bookString += "Author = " + this.author + "\n";
+        bookString += "ISBN = " + this.isbn + "\n";
+        bookString += "Price = " + this.price + "\n";
 
         return bookString;
     }
