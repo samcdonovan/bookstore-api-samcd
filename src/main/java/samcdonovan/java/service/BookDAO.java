@@ -19,14 +19,19 @@ public class BookDAO {
     public BookDAO() {
     }
 
-    public void newConnection() throws SQLException{
+    /**
+     * Creates a new H2 connection using H2 credentials
+     * and sets class variable 'connection' to this new connection
+     *
+     * @throws SQLException
+     */
+    public void newConnection() throws SQLException {
         String jdbcURL = "jdbc:h2:mem:bookstoredb";
         String username = "sa";
         String password = "";
 
         this.connection = DriverManager.getConnection(jdbcURL, username, password);
         System.out.println("H2 connection has started!");
-
     }
 
     /**
@@ -80,20 +85,23 @@ public class BookDAO {
     }
 
     /**
-     * Retrieves a book with a specific ID
+     * Inserts a book into the H2 database
      *
-     * @param id The ID of the book
-     * @return Book The book from the database with the specified ID
+     * @param book The book to be inserted
+     * @return The newly inserted book
+     * @throws SQLException
      */
-    public Book findById(int id) throws SQLException {
+    public Book addBook(Book book) throws SQLException {
 
-        ResultSet resultSet = executeQuery("SELECT * FROM books WHERE id=" + id);
+        String query = "INSERT INTO books (title, author, isbn, price) VALUES " +
+                "('" + book.getTitle() + "', '" + book.getAuthor() + "', '"
+                + book.getIsbn() + "', " + book.getPrice() + ")";
 
-        Book book = null;
         try {
-            while (resultSet.next()) {
-                book = mapToBook(resultSet);
-            }
+            //ResultSet resultSet = runH2Query(query);
+
+            execute(query);
+            //newBook = mapToBook(resultSet);
         } catch (Exception exception) {
             System.out.println(exception);
         } finally {
@@ -130,23 +138,20 @@ public class BookDAO {
     }
 
     /**
-     * Inserts a book into the H2 database
+     * Retrieves a book with a specific ID
      *
-     * @param book The book to be inserted
-     * @return The newly inserted book
-     * @throws SQLException
+     * @param id The ID of the book
+     * @return Book The book from the database with the specified ID
      */
-    public Book addBook(Book book) throws SQLException {
+    public Book findById(int id) throws SQLException {
 
-        String query = "INSERT INTO books (title, author, isbn, price) VALUES " +
-                "('" + book.getTitle() + "', '" + book.getAuthor() + "', '"
-                + book.getIsbn() + "', " + book.getPrice() + ")";
+        ResultSet resultSet = executeQuery("SELECT * FROM books WHERE id=" + id);
 
+        Book book = null;
         try {
-            //ResultSet resultSet = runH2Query(query);
-
-            execute(query);
-            //newBook = mapToBook(resultSet);
+            while (resultSet.next()) {
+                book = mapToBook(resultSet);
+            }
         } catch (Exception exception) {
             System.out.println(exception);
         } finally {
@@ -154,6 +159,35 @@ public class BookDAO {
         }
 
         return book;
+    }
+
+    /**
+     * Retrieves all books that contain the specified author name
+     *
+     * @param author The author of the book
+     * @return List A list of all the books with author fields containing the specified author
+     */
+    public List<Book> findByAuthor(String author) throws SQLException {
+
+        ResultSet resultSet = executeQuery("SELECT * FROM books " +
+                "WHERE LOWER(author) LIKE LOWER('%" + author + "%')");
+
+        Book book = new Book();
+        List<Book> bookList = new ArrayList<>();
+
+        try {
+            while (resultSet.next()) {
+
+                book = mapToBook(resultSet);
+                bookList.add(book);
+            }
+        } catch (Exception exception) {
+            System.out.println(exception);
+        } finally {
+            this.connection.close();
+        }
+
+        return bookList;
     }
 
     /**
@@ -188,5 +222,4 @@ public class BookDAO {
 
         this.connection.close();
     }
-
 }

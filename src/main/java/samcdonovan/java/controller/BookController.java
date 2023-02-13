@@ -43,7 +43,23 @@ public class BookController {
     }
 
     /**
-     * GET path for books with a specific ID.
+     * GET path for all books
+     *
+     * @return List A list containing all the books in the database
+     */
+    @GetMapping("/books")
+    public List<Book> getBooks() {
+        List<Book> list = new ArrayList<>();
+        try {
+            list = dao.findAll();
+        } catch (Exception exception) {
+            System.out.println(exception);
+        }
+        return list;
+    }
+
+    /**
+     * GET path for books with a specific ID
      *
      * @param id The database ID of the book
      * @return Book The book retrieved from the database
@@ -61,19 +77,20 @@ public class BookController {
     }
 
     /**
-     * GET path for all books
+     * GET path for books by a specific author
      *
-     * @return List A list containing all the books in the database
+     * @param author The author to search for
+     * @return List A list containing all books by the author
      */
-    @GetMapping("/books")
-    public List<Book> getBooks() {
-        List<Book> list = new ArrayList<>();
+    @GetMapping(value = "/books", params = "author")
+    public List<Book> getBooksByAuthor(@RequestParam String author) {
+        List<Book> bookList = new ArrayList<>();
         try {
-            list = dao.findAll();
+            bookList = dao.findByAuthor(author);
         } catch (Exception exception) {
-            System.out.println(exception);
+            System.out.println(HttpStatus.NO_CONTENT);
         }
-        return list;
+        return bookList;
     }
 
     /**
