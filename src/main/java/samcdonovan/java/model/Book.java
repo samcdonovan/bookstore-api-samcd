@@ -6,7 +6,7 @@ import jakarta.persistence.*;
  * Book class containing data about each book in the database
  */
 @Entity
-@Table(name = "BOOKS")
+@Table(name = "books")
 public class Book {
 
     @Id

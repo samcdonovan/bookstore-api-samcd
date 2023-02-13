@@ -1,6 +1,7 @@
 package samcdonovan.java.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import samcdonovan.java.model.Book;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,10 +36,9 @@ public class BookController {
     public Book getBook(@RequestParam Integer id) {
         Book book = null;
         try {
-            System.out.println(id);
             book = dao.findById(id);
         } catch (Exception exception) {
-
+            System.out.println(HttpStatus.NO_CONTENT);
             System.out.println("Book with ID " + id + " does not exist.");
         }
         return book;
