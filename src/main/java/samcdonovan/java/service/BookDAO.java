@@ -91,7 +91,7 @@ public class BookDAO {
      * @return The newly inserted book
      * @throws SQLException
      */
-    public Book addBook(Book book) throws SQLException {
+    public Book insertBook(Book book) throws SQLException {
 
         String query = "INSERT INTO books (title, author, isbn, price) VALUES " +
                 "('" + book.getTitle() + "', '" + book.getAuthor() + "', '"

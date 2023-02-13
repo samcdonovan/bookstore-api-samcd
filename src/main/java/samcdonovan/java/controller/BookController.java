@@ -1,13 +1,10 @@
 package samcdonovan.java.controller;
 
-import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import samcdonovan.java.model.Book;
 import samcdonovan.java.service.BookDAO;
-
-import javax.sound.midi.SysexMessage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,10 +28,10 @@ public class BookController {
      */
     @PostMapping("/books")
     public ResponseEntity<Book> addBook(@RequestBody Book book) {
-        System.out.println(book);
+
         try {
-            Book newBook = dao.addBook(book);
-            System.out.println(newBook);
+            Book newBook = dao.insertBook(book);
+
             return new ResponseEntity<>(newBook, HttpStatus.CREATED);
         } catch (Exception exception) {
             System.out.println(exception);
