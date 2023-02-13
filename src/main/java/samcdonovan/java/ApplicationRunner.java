@@ -19,7 +19,8 @@ public class ApplicationRunner {
      */
     @EventListener(ApplicationReadyEvent.class)
     public void appReadyMessage() {
-        System.out.println("\nApplication has started at:");
+        System.out.println("\n---------------------------------------");
+        System.out.println("Application has started at:");
         System.out.println("localhost:8080/books\n");
     }
 }
