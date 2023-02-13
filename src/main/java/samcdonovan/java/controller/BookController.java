@@ -81,7 +81,7 @@ public class BookController {
      *
      * @param book The request body for a PUT request containing information
      *             about the book to be updated.
-     * @param id The ID of the book to be updated
+     * @param id   The ID of the book to be updated
      */
     @PutMapping("/books/{id}")
     public void updateBook(@RequestBody Book book, @PathVariable("id") Integer id) {
@@ -98,13 +98,12 @@ public class BookController {
      * @param id The ID of the book to be deleted
      */
     @DeleteMapping("/books/{id}")
-    public void deleteBook(@PathVariable("id") Integer id){
-        try{
+    public void deleteBook(@PathVariable("id") Integer id) {
+        try {
             dao.deleteBookById(id);
-        } catch (Exception exception){
+        } catch (Exception exception) {
             System.out.println(exception);
         }
-}
-
+    }
 
 }

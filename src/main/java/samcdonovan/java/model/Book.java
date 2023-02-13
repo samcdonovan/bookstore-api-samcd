@@ -3,7 +3,7 @@ package samcdonovan.java.model;
 import jakarta.persistence.*;
 
 /**
- * Book class containing data about each book in the database
+ * Book class containing data about each book in the database.
  */
 @Entity
 @Table(name = "books")
