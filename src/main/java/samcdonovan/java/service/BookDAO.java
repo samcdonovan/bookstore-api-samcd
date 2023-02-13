@@ -57,11 +57,15 @@ public class BookDAO {
      * @param query SQL query to run through H2
      * @throws SQLException
      */
-    public void execute(String query) throws SQLException {
+    public Statement execute(String query) throws SQLException {
         newConnection();
 
         Statement statement = this.connection.createStatement();
         statement.execute(query);
+       /* while(statement.getGeneratedKeys().next()){
+            System.out.println(statement.getGeneratedKeys().getInt("id"));
+        }*/
+        return statement;
     }
 
     /**
@@ -98,10 +102,9 @@ public class BookDAO {
                 + book.getIsbn() + "', " + book.getPrice() + ")";
 
         try {
-            //ResultSet resultSet = runH2Query(query);
+            Statement executedStatement = execute(query);
+            book.setId(executedStatement.getGeneratedKeys().getInt(0));
 
-            execute(query);
-            //newBook = mapToBook(resultSet);
         } catch (Exception exception) {
             System.out.println(exception);
         } finally {
@@ -200,7 +203,6 @@ public class BookDAO {
      */
     public Book updateBook(Book book, int id) throws SQLException {
 
-        Book updatedBook = new Book();
         execute("UPDATE books SET title='" + book.getTitle() +
                 "', author='" + book.getAuthor() + "', isbn='" + book.getIsbn() +
                 "', price=" + book.getPrice() + " WHERE id=" + id);
@@ -208,7 +210,7 @@ public class BookDAO {
 
         this.connection.close();
 
-        return updatedBook;
+        return book;
     }
 
     /**

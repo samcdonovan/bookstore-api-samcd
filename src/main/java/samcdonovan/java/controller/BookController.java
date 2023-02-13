@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import samcdonovan.java.model.Book;
 import samcdonovan.java.service.BookDAO;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +32,6 @@ public class BookController {
 
         try {
             Book newBook = dao.insertBook(book);
-
             return new ResponseEntity<>(newBook, HttpStatus.CREATED);
         } catch (Exception exception) {
             System.out.println(exception);
@@ -45,14 +45,15 @@ public class BookController {
      * @return List A list containing all the books in the database
      */
     @GetMapping("/books")
-    public List<Book> getBooks() {
-        List<Book> list = new ArrayList<>();
+    public ResponseEntity<List<Book>> getBooks() {
+        List<Book> bookList = new ArrayList<>();
         try {
-            list = dao.findAll();
+            bookList = dao.findAll();
+            return new ResponseEntity<>(bookList, HttpStatus.OK);
         } catch (Exception exception) {
             System.out.println(exception);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return list;
     }
 
     /**
@@ -62,15 +63,15 @@ public class BookController {
      * @return Book The book retrieved from the database
      */
     @GetMapping("/books/{id}")
-    public Book getBook(@PathVariable Integer id) {
+    public ResponseEntity<Book> getBook(@PathVariable Integer id) {
         Book book = null;
         try {
             book = dao.findById(id);
+            return new ResponseEntity<>(book, HttpStatus.OK);
         } catch (Exception exception) {
-            System.out.println(HttpStatus.NO_CONTENT);
-            System.out.println("Book with ID " + id + " does not exist.");
+            System.out.println(exception);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return book;
     }
 
     /**
@@ -80,14 +81,15 @@ public class BookController {
      * @return List A list containing all books by the author
      */
     @GetMapping(value = "/books", params = "author")
-    public List<Book> getBooksByAuthor(@RequestParam String author) {
+    public ResponseEntity<List<Book>> getBooksByAuthor(@RequestParam String author) {
         List<Book> bookList = new ArrayList<>();
         try {
             bookList = dao.findByAuthor(author);
+            return new ResponseEntity<>(bookList, HttpStatus.OK);
         } catch (Exception exception) {
-            System.out.println(HttpStatus.NO_CONTENT);
+            System.out.println(exception);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return bookList;
     }
 
     /**
@@ -95,14 +97,16 @@ public class BookController {
      *
      * @param book The request body for a PUT request containing information
      *             about the book to be updated.
-     * @param id The ID of the book to be updated
+     * @param id   The ID of the book to be updated
      */
     @PutMapping("/books/{id}")
-    public void updateBook(@RequestBody Book book, @PathVariable("id") Integer id) {
+    public ResponseEntity<HttpStatus> updateBook(@RequestBody Book book, @PathVariable("id") Integer id) {
         try {
             dao.updateBook(book, id);
+            return new ResponseEntity(HttpStatus.OK);
         } catch (Exception exception) {
             System.out.println(exception);
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -112,12 +116,13 @@ public class BookController {
      * @param id The ID of the book to be deleted
      */
     @DeleteMapping("/books/{id}")
-    public void deleteBook(@PathVariable("id") Integer id) {
+    public ResponseEntity<HttpStatus> deleteBook(@PathVariable("id") Integer id) {
         try {
             dao.deleteBookById(id);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception exception) {
             System.out.println(exception);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
 }
