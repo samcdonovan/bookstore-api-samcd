@@ -1,4 +1,6 @@
-package samcdonovan.java.model;
+package samcdonovan.java.service;
+
+import samcdonovan.java.model.Book;
 
 import java.sql.*;
 import java.util.ArrayList;
