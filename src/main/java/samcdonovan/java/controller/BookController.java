@@ -24,7 +24,7 @@ public class BookController {
     /**
      * POST path for creating new books in the database
      *
-     * @param book The request body for POST request containing information
+     * @param book The request body for a POST request containing information
      *             about the book to be inserted.
      * @return ResponseEntity A response entity containing the book object
      * and a HTTP status code.
@@ -76,6 +76,13 @@ public class BookController {
         return list;
     }
 
+    /**
+     * PUT path for updating the book with the specified ID
+     *
+     * @param book The request body for a PUT request containing information
+     *             about the book to be updated.
+     * @param id The ID of the book to be updated
+     */
     @PutMapping("/books/{id}")
     public void updateBook(@RequestBody Book book, @PathVariable("id") Integer id) {
         try {
@@ -85,6 +92,11 @@ public class BookController {
         }
     }
 
+    /**
+     * DELETE path for deleting the book with the specified ID
+     *
+     * @param id The ID of the book to be deleted
+     */
     @DeleteMapping("/books/{id}")
     public void deleteBook(@PathVariable("id") Integer id){
         try{
