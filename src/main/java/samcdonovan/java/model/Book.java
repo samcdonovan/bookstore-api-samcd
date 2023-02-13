@@ -1,15 +1,23 @@
 package samcdonovan.java.model;
 
+import jakarta.persistence.*;
+
 /**
  * Book class containing data about each book in the database
  */
+@Entity
+@Table(name = "BOOKS")
 public class Book {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String title;
     private String author;
     private String isbn;
     private double price;
+
+    public Book(){}
 
     /**
      * Book class constructor; creates a new Book object with a title, author, ISBN and a price.
@@ -63,7 +71,7 @@ public class Book {
         this.isbn = isbn;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 }
