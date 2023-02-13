@@ -119,7 +119,8 @@ public class BookDAO {
         ResultSet resultSet = runH2Query(query);
 
         newBook = mapToBook(resultSet);
-        
+
         return newBook;
     }
+
 }

@@ -17,15 +17,16 @@ public class Book {
     private String isbn;
     private double price;
 
-    public Book(){}
+    public Book() {
+    }
 
     /**
      * Book class constructor; creates a new Book object with a title, author, ISBN and a price.
      *
-     * @param title The title of the book
+     * @param title  The title of the book
      * @param author The book's author
-     * @param isbn The unique ISBN for the book
-     * @param price The price of the book at the bookstore
+     * @param isbn   The unique ISBN for the book
+     * @param price  The price of the book at the bookstore
      */
     public Book(String title, String author, String isbn, double price) {
         this.title = title;
@@ -73,5 +74,18 @@ public class Book {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        String bookString = "";
+
+        bookString += "ID = " + this.id + "/n";
+        bookString += "Title = " + this.title + "/n";
+        bookString += "Author = " + this.author + "/n";
+        bookString += "ISBN = " + this.isbn + "/n";
+        bookString += "Price = " + this.price + "/n";
+
+        return bookString;
     }
 }
