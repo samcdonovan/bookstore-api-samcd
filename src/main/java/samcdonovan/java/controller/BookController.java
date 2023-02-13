@@ -19,6 +19,14 @@ public class BookController {
 
     BookDAO dao = new BookDAO();
 
+    /**
+     * POST path for creating new books in the database
+     *
+     * @param book The request body for POST request containing information
+     *             about the book to be inserted.
+     * @return ResponseEntity A response entity containing the book object
+     * and a HTTP status code.
+     */
     @PostMapping("/books")
     public ResponseEntity<Book> addBook(@RequestBody Book book) {
         System.out.println(book);
