@@ -19,15 +19,7 @@ public class BookDAO {
     public BookDAO() {
     }
 
-    /**
-     * Helper function to set up a H2 connection and then
-     * run the specified query.
-     *
-     * @param query SQL query to run through H2
-     * @return ResultSet The result from running the SQL query
-     * @throws SQLException
-     */
-    public ResultSet runH2Query(String query) throws SQLException {
+    public void newConnection() throws SQLException{
         String jdbcURL = "jdbc:h2:mem:bookstoredb";
         String username = "sa";
         String password = "";
@@ -35,9 +27,36 @@ public class BookDAO {
         this.connection = DriverManager.getConnection(jdbcURL, username, password);
         System.out.println("H2 connection has started!");
 
-        Statement statement = connection.createStatement();
+    }
+
+    /**
+     * Helper function to set up a H2 connection and then
+     * run the 'executeQuery' function to return elements from the database.
+     *
+     * @param query SQL query to run through H2
+     * @return ResultSet The result from running the SQL query
+     * @throws SQLException
+     */
+    public ResultSet executeQuery(String query) throws SQLException {
+        newConnection();
+
+        Statement statement = this.connection.createStatement();
 
         return statement.executeQuery(query);
+    }
+
+    /**
+     * Helper function set up a H2 connection and run CREATE, UPDATE
+     * and DELETE functions.
+     *
+     * @param query SQL query to run through H2
+     * @throws SQLException
+     */
+    public void execute(String query) throws SQLException {
+        newConnection();
+
+        Statement statement = this.connection.createStatement();
+        statement.execute(query);
     }
 
     /**
@@ -68,7 +87,7 @@ public class BookDAO {
      */
     public Book findById(int id) throws SQLException {
 
-        ResultSet resultSet = runH2Query("SELECT * FROM books WHERE id=" + id);
+        ResultSet resultSet = executeQuery("SELECT * FROM books WHERE id=" + id);
 
         Book book = null;
         try {
@@ -84,7 +103,6 @@ public class BookDAO {
         return book;
     }
 
-
     /**
      * Retrieves all books from the database
      *
@@ -92,7 +110,7 @@ public class BookDAO {
      */
     public List<Book> findAll() throws SQLException {
 
-        ResultSet resultSet = runH2Query("SELECT * FROM books");
+        ResultSet resultSet = executeQuery("SELECT * FROM books");
 
         Book book = new Book();
         List<Book> bookList = new ArrayList<>();
@@ -111,17 +129,14 @@ public class BookDAO {
         return bookList;
     }
 
+    /**
+     * Inserts a book into the H2 database
+     *
+     * @param book The book to be inserted
+     * @return The newly inserted book
+     * @throws SQLException
+     */
     public Book addBook(Book book) throws SQLException {
-        String jdbcURL = "jdbc:h2:mem:bookstoredb";
-        String username = "sa";
-        String password = "";
-
-        this.connection = DriverManager.getConnection(jdbcURL, username, password);
-        System.out.println("H2 connection has started!");
-
-        Statement statement = connection.createStatement();
-
-        Book newBook = new Book();
 
         String query = "INSERT INTO books (title, author, isbn, price) VALUES " +
                 "('" + book.getTitle() + "', '" + book.getAuthor() + "', '"
@@ -130,7 +145,7 @@ public class BookDAO {
         try {
             //ResultSet resultSet = runH2Query(query);
 
-            statement.execute(query);
+            execute(query);
             //newBook = mapToBook(resultSet);
         } catch (Exception exception) {
             System.out.println(exception);
@@ -141,43 +156,37 @@ public class BookDAO {
         return book;
     }
 
+    /**
+     * Updates the book with the specified ID in the database
+     *
+     * @param book The new information for the book to be updated
+     * @param id   The ID of the book to be updated
+     * @return The newly updated book
+     * @throws SQLException
+     */
     public Book updateBook(Book book, int id) throws SQLException {
-        String jdbcURL = "jdbc:h2:mem:bookstoredb";
-        String username = "sa";
-        String password = "";
 
-        this.connection = DriverManager.getConnection(jdbcURL, username, password);
-        System.out.println("H2 connection has started!");
-
-        Statement statement = connection.createStatement();
         Book updatedBook = new Book();
-
-        statement.execute("UPDATE books SET title='" + book.getTitle() +
+        execute("UPDATE books SET title='" + book.getTitle() +
                 "', author='" + book.getAuthor() + "', isbn='" + book.getIsbn() +
                 "', price=" + book.getPrice() + " WHERE id=" + id);
 
 
         this.connection.close();
 
-
         return updatedBook;
     }
 
-    public void deleteBookById(int id) throws SQLException{
-        String jdbcURL = "jdbc:h2:mem:bookstoredb";
-        String username = "sa";
-        String password = "";
-
-        this.connection = DriverManager.getConnection(jdbcURL, username, password);
-        System.out.println("H2 connection has started!");
-
-        Statement statement = connection.createStatement();
-
-        statement.execute("DELETE FROM books WHERE id=" + id);
+    /**
+     * Deletes the book with the specified ID from the database.
+     *
+     * @param id The ID of the book to be deleted.
+     * @throws SQLException
+     */
+    public void deleteBookById(int id) throws SQLException {
+        execute("DELETE FROM books WHERE id=" + id);
 
         this.connection.close();
-
-
     }
 
 }
