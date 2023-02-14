@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import samcdonovan.java.controller.BookController;
 import samcdonovan.java.model.Book;
 
@@ -41,9 +41,11 @@ public class AppTest {
     @DisplayName("POST path /books; inserts document into database correctly")
     public void postPathCorrectlyInserts() throws Exception {
         Book testBook = new Book("TestTitle", "TestAuthor", "1111111111111", 9.6);
+        ObjectMapper objMapper = new ObjectMapper();
+        String bookJson = objMapper.writeValueAsString(testBook);
 
         mockMvc.perform(post("/books")
-                        .content(String.valueOf(testBook))
+                        .content(String.valueOf(bookJson))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
     }
