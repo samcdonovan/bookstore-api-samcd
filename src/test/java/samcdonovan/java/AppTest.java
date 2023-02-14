@@ -2,6 +2,7 @@ package samcdonovan.java;
 
 import org.junit.jupiter.api.*;
 
+import static com.fasterxml.jackson.databind.DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,6 +130,48 @@ public class AppTest {
                 .andExpect(jsonPath("$.author", is("PutTestAuthor")))
                 .andExpect(jsonPath("$.isbn", is("000000000000")))
                 .andExpect(jsonPath("$.price", is(12.34)));
+    }
+
+    @Test
+    @Order(6)
+    @DisplayName("PATCH path /books/{id}; updates given fields of document with the given ID")
+    public void patchUpdatesCorrectly() throws Exception {
+        Book testBook = new Book("PatchTestTitle", null, null, 0.0);
+
+        ObjectMapper objMapper = new ObjectMapper();
+        objMapper.configure(ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
+        String bookJson = objMapper.writeValueAsString(testBook);
+
+        mockMvc.perform(patch("/books/3")
+                        .content(String.valueOf(bookJson))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/books/3")).andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id", is(3)))
+                .andExpect(jsonPath("$.title", is("PatchTestTitle")))
+                .andExpect(jsonPath("$.author", is("J.R.R. Tolkien")))
+                .andExpect(jsonPath("$.isbn", is("9780261103580")))
+                .andExpect(jsonPath("$.price", is(6.5)));
+
+        testBook.setAuthor("PatchTestAuthor");
+        testBook.setIsbn("2222222222222");
+        testBook.setTitle(null);
+        bookJson = objMapper.writeValueAsString(testBook);
+
+        mockMvc.perform(patch("/books/3")
+                        .content(String.valueOf(bookJson))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/books/3")).andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id", is(3)))
+                .andExpect(jsonPath("$.title", is("PatchTestTitle")))
+                .andExpect(jsonPath("$.author", is("PatchTestAuthor")))
+                .andExpect(jsonPath("$.isbn", is("2222222222222")))
+                .andExpect(jsonPath("$.price", is(6.5)));
     }
 
     @Test

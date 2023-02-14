@@ -246,7 +246,7 @@ public class BookDAO {
      * Updates given fields of the book with the given ID
      *
      * @param book The fields to update to
-     * @param id The ID of the book to update
+     * @param id   The ID of the book to update
      * @return The newly updated book
      * @throws SQLException
      */
@@ -254,28 +254,29 @@ public class BookDAO {
         String sqlQuery = "UPDATE books SET ";
         boolean first = true;
 
-        if(book.getTitle() != null){
+        System.out.println(book);
+        if (book.getTitle() != null && !book.getTitle().isEmpty()) {
             sqlQuery += "title='" + book.getTitle() + "'";
             first = false;
         }
-        if(book.getAuthor() != null){
-            if(!first) sqlQuery += ", ";
+        if (book.getAuthor() != null && !book.getAuthor().isEmpty()) {
+            if (!first) sqlQuery += ", ";
 
             sqlQuery += "author='" + book.getAuthor() + "'";
 
-            if(first) first = false;
+            if (first) first = false;
         }
-        if(book.getIsbn() != null){
+        if (book.getIsbn() != null && !book.getIsbn().isEmpty()) {
 
-            if(!first) sqlQuery += ", ";
+            if (!first) sqlQuery += ", ";
 
             sqlQuery += "isbn='" + book.getIsbn() + "'";
 
-            if(first) first = false;
+            if (first) first = false;
         }
-        if(book.getPrice() != 0.0){
+        if (book.getPrice() > 0.0) {
 
-            if(!first) sqlQuery += ", ";
+            if (!first) sqlQuery += ", ";
 
             sqlQuery += "price=" + book.getPrice();
         }
