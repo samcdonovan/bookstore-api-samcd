@@ -80,7 +80,7 @@ public class AppTest {
     }
 
     @Test
-    @Order(5)
+    @Order(4)
     @DisplayName("GET path /books?author={author}; retrieves documents with authors containing the given name")
     public void getPathRetrievesBooksWithGivenAuthor() throws Exception {
 
@@ -95,7 +95,21 @@ public class AppTest {
     }
 
     @Test
-    @Order(6)
+    @Order(4)
+    @DisplayName("GET path /books?title={title}; retrieves documents containing given title")
+    public void getPathRetrievesBooksWithGivenTitle() throws Exception {
+
+        mockMvc.perform(get("/books?title=The"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(3)))
+                .andExpect(jsonPath("$[0].title", containsString("The")))
+                .andExpect(jsonPath("$[1].title", containsString("The")))
+                .andExpect(jsonPath("$[2].title", containsString("The")));
+    }
+
+    @Test
+    @Order(5)
     @DisplayName("PUT path /books/{id}; updates document with given ID")
     public void putPathCorrectlyUpdates() throws Exception {
         Book testBook = new Book("PutTestTitle", "PutTestAuthor", "000000000000", 12.34);
@@ -118,7 +132,7 @@ public class AppTest {
     }
 
     @Test
-    @Order(7)
+    @Order(6)
     @DisplayName("DELETE path /books/{id}; deletes document with given ID")
     public void deletePathCorrectlyDeletes() throws Exception {
         mockMvc.perform(delete("/books/4"))
@@ -132,7 +146,7 @@ public class AppTest {
     }
 
     @Test
-    @Order(8)
+    @Order(7)
     @DisplayName("DELETE path /books; deletes all rows in 'books' table")
     public void deleteAllBooks() throws Exception {
         mockMvc.perform(delete("/books"))

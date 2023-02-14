@@ -194,6 +194,35 @@ public class BookDAO {
     }
 
     /**
+     * Retrieves all books that contain the specified title
+     *
+     * @param title The title of the book
+     * @return List A list of all the books with title fields containing the specified title
+     */
+    public List<Book> findByTitle(String title) throws SQLException {
+
+        ResultSet resultSet = executeQuery("SELECT * FROM books " +
+                "WHERE LOWER(title) LIKE LOWER('%" + title + "%')");
+
+        Book book = new Book();
+        List<Book> bookList = new ArrayList<>();
+
+        try {
+            while (resultSet.next()) {
+
+                book = mapToBook(resultSet);
+                bookList.add(book);
+            }
+        } catch (Exception exception) {
+            System.out.println(exception);
+        } finally {
+            this.connection.close();
+        }
+
+        return bookList;
+    }
+
+    /**
      * Updates the book with the specified ID in the database
      *
      * @param book The new information for the book to be updated
