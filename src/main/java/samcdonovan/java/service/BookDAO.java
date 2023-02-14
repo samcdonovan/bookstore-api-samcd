@@ -243,6 +243,53 @@ public class BookDAO {
     }
 
     /**
+     * Updates given fields of the book with the given ID
+     *
+     * @param book The fields to update to
+     * @param id The ID of the book to update
+     * @return The newly updated book
+     * @throws SQLException
+     */
+    public Book updateFields(Book book, int id) throws SQLException {
+        String sqlQuery = "UPDATE books SET ";
+        boolean first = true;
+
+        if(book.getTitle() != null){
+            sqlQuery += "title='" + book.getTitle() + "'";
+            first = false;
+        }
+        if(book.getAuthor() != null){
+            if(!first) sqlQuery += ", ";
+
+            sqlQuery += "author='" + book.getAuthor() + "'";
+
+            if(first) first = false;
+        }
+        if(book.getIsbn() != null){
+
+            if(!first) sqlQuery += ", ";
+
+            sqlQuery += "isbn='" + book.getIsbn() + "'";
+
+            if(first) first = false;
+        }
+        if(book.getPrice() != 0.0){
+
+            if(!first) sqlQuery += ", ";
+
+            sqlQuery += "price=" + book.getPrice();
+        }
+
+        sqlQuery += " WHERE id=" + id;
+        execute(sqlQuery);
+
+
+        this.connection.close();
+
+        return book;
+    }
+
+    /**
      * Deletes the book with the specified ID from the database.
      *
      * @param id The ID of the book to be deleted.

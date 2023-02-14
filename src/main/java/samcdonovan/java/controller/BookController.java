@@ -128,9 +128,27 @@ public class BookController {
      * @return ResponseEntity Containing a HTTP status code for the request
      */
     @PutMapping("/books/{id}")
-    public ResponseEntity<HttpStatus> updateBook(@RequestBody Book book, @PathVariable("id") Integer id) {
+    public ResponseEntity<HttpStatus> updateBookByPut(@RequestBody Book book, @PathVariable("id") Integer id) {
         try {
             dao.updateBook(book, id);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception exception) {
+            System.out.println(exception);
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * PATCH path for updating fields for a document in the database
+     *
+     * @param book The fields of the book to be updated
+     * @param id The ID of the book to be updated
+     * @return ResponseEntity Containing a HTTP status code for the request
+     */
+    @PatchMapping("/books/{id}")
+    public ResponseEntity<HttpStatus> updateBookByPatch(@RequestBody Book book, @PathVariable("id") Integer id) {
+        try {
+            dao.updateFields(book, id);
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception exception) {
             System.out.println(exception);
