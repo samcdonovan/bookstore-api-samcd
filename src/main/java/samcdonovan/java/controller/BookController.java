@@ -24,18 +24,17 @@ public class BookController {
      *
      * @param book The request body for a POST request containing information
      *             about the book to be inserted.
-     * @return ResponseEntity A response entity containing the book object
-     * and a HTTP status code.
+     * @return ResponseEntity Containing the HTTP status code for the request.
      */
     @PostMapping("/books")
-    public ResponseEntity<Book> addBook(@RequestBody Book book) {
+    public ResponseEntity<HttpStatus> addBook(@RequestBody Book book) {
 
         try {
-            Book newBook = dao.insertBook(book);
-            return new ResponseEntity<>(newBook, HttpStatus.CREATED);
+            dao.insert(book);
+            return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception exception) {
             System.out.println(exception);
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -48,7 +47,7 @@ public class BookController {
     public ResponseEntity<List<Book>> getBooks() {
         List<Book> bookList = new ArrayList<>();
         try {
-            bookList = dao.findAll();
+            bookList = dao.getAll();
             if (bookList.size() > 0) {
                 return new ResponseEntity<>(bookList, HttpStatus.OK);
             } else {
@@ -70,7 +69,7 @@ public class BookController {
     public ResponseEntity<Book> getBook(@PathVariable Integer id) {
         Book book = null;
         try {
-            book = dao.findById(id);
+            book = dao.get(id);
             if (book != null) {
                 return new ResponseEntity<>(book, HttpStatus.OK);
             } else {
@@ -130,7 +129,7 @@ public class BookController {
     @PutMapping("/books/{id}")
     public ResponseEntity<HttpStatus> updateBookByPut(@RequestBody Book book, @PathVariable("id") Integer id) {
         try {
-            dao.updateBook(book, id);
+            dao.updateDocument(book, id);
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception exception) {
             System.out.println(exception);
@@ -165,7 +164,7 @@ public class BookController {
     @DeleteMapping("/books/{id}")
     public ResponseEntity<Book> deleteBook(@PathVariable("id") Integer id) {
         try {
-            boolean success = dao.deleteBookById(id);
+            boolean success = dao.delete(id);
             if (success) {
                 return new ResponseEntity<>(null, HttpStatus.OK);
             } else {
@@ -185,7 +184,7 @@ public class BookController {
     @DeleteMapping("/books")
     public ResponseEntity<HttpStatus> deleteAllBooks() {
         try {
-            dao.deleteAllBooks();
+            dao.deleteAll();
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception exception) {
             System.out.println(exception);

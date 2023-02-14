@@ -16,17 +16,17 @@ public interface DAO <T> {
 
     T get(int id) throws SQLException;
 
-    T get(T t) throws SQLException;
+    //T get(T t) throws SQLException;
 
     List<T> getAll() throws SQLException;
 
     void insert(T t) throws SQLException;
 
-    void updateDocument(T t ) throws SQLException;
+    T updateDocument(T t, int id) throws SQLException;
 
-    void updateFields(T t) throws SQLException;
+    T updateFields(T t, int id) throws SQLException;
 
-    void delete(T t) throws SQLException;
+    boolean delete(int id) throws SQLException;
 
     void deleteAll() throws SQLException;
 

@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Data Access Object for Books
  */
-public class BookDAO implements DAO {
+public class BookDAO implements DAO <Book> {
 
     private Connection connection; // SQL connection variable
 
@@ -32,17 +32,16 @@ public class BookDAO implements DAO {
      * Inserts a book into the H2 database
      *
      * @param book The book to be inserted
-     * @return The newly inserted book
      * @throws SQLException
      */
-    public Book insertBook(Book book) throws SQLException {
+    public void insert(Book book) throws SQLException {
 
         String query = "INSERT INTO books (title, author, isbn, price) VALUES " +
                 "('" + book.getTitle() + "', '" + book.getAuthor() + "', '"
                 + book.getIsbn() + "', " + book.getPrice() + ")";
 
         try {
-            DAOUtils.execute(this.connection, query);
+            DAOUtils.execute(this, query);
             //book.setId(executedStatement.getGeneratedKeys().getInt(0));
 
         } catch (Exception exception) {
@@ -50,8 +49,6 @@ public class BookDAO implements DAO {
         } finally {
             this.connection.close();
         }
-
-        return book;
     }
 
     /**
@@ -61,7 +58,7 @@ public class BookDAO implements DAO {
      */
     public List<Book> getAll() throws SQLException {
 
-        ResultSet resultSet = DAOUtils.executeQuery(this.connection, "SELECT * FROM books");
+        ResultSet resultSet = DAOUtils.executeQuery(this, "SELECT * FROM books");
 
         Book book = new Book();
         List<Book> bookList = new ArrayList<>();
@@ -88,7 +85,7 @@ public class BookDAO implements DAO {
      */
     public Book get(int id) throws SQLException {
 
-        ResultSet resultSet = DAOUtils.executeQuery(this.connection, "SELECT * FROM books WHERE id=" + id);
+        ResultSet resultSet = DAOUtils.executeQuery(this, "SELECT * FROM books WHERE id=" + id);
 
         Book book = null;
         try {
@@ -112,7 +109,7 @@ public class BookDAO implements DAO {
      */
     public List<Book> findByAuthor(String author) throws SQLException {
 
-        ResultSet resultSet = DAOUtils.executeQuery(this.connection, "SELECT * FROM books " +
+        ResultSet resultSet = DAOUtils.executeQuery(this, "SELECT * FROM books " +
                 "WHERE LOWER(author) LIKE LOWER('%" + author + "%')");
 
         Book book = new Book();
@@ -141,7 +138,7 @@ public class BookDAO implements DAO {
      */
     public List<Book> findByTitle(String title) throws SQLException {
 
-        ResultSet resultSet = DAOUtils.executeQuery(this.connection, "SELECT * FROM books " +
+        ResultSet resultSet = DAOUtils.executeQuery(this, "SELECT * FROM books " +
                 "WHERE LOWER(title) LIKE LOWER('%" + title + "%')");
 
         Book book = new Book();
@@ -172,7 +169,7 @@ public class BookDAO implements DAO {
      */
     public Book updateDocument(Book book, int id) throws SQLException {
 
-        DAOUtils.execute(this.connection, "UPDATE books SET title='" + book.getTitle() +
+        DAOUtils.execute(this, "UPDATE books SET title='" + book.getTitle() +
                 "', author='" + book.getAuthor() + "', isbn='" + book.getIsbn() +
                 "', price=" + book.getPrice() + " WHERE id=" + id);
 
