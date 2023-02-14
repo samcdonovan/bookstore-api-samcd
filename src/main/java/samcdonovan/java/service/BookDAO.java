@@ -89,6 +89,70 @@ public class BookDAO {
     }
 
     /**
+     * Adds fields to an SQL query based on the parameters
+     *
+     * @param fieldName The name of the field to be added
+     * @param fieldVal The value of the field to be added (String)
+     * @param isFirst Flag to see if this is the first field in the query or not
+     * @return String containing the field to be added to an SQL query
+     */
+    public String addField(String fieldName, String fieldVal, boolean[] isFirst){
+        String fieldString = "";
+        if (fieldVal != null && !fieldVal.isEmpty()) {
+            if (!isFirst[0]) fieldString += ", ";
+
+            fieldString += fieldName + "='" + fieldVal + "'";
+
+            if(isFirst[0]) isFirst[0] = false;
+        }
+        return fieldString;
+    }
+
+    /**
+     * Adds fields to an SQL query based on the parameters
+     *
+     * @param fieldName The name of the field to be added
+     * @param fieldVal The value of the field to be added (double)
+     * @param isFirst Flag to see if this is the first field in the query or not
+     * @return String containing the field to be added to an SQL query
+     */
+    public String addField(String fieldName, double fieldVal, boolean[] isFirst){
+        String fieldString = "";
+
+        if (fieldVal > 0.0) {
+
+            if (!isFirst[0]) fieldString += ", ";
+
+            fieldString += fieldName + "=" + fieldVal;
+
+            if(isFirst[0]) isFirst[0] = false;
+        }
+
+        return fieldString;
+    }
+
+    /**
+     * Builds an update query based on the fields passed through the book object
+     *
+     * @param book The fields to update the database with
+     * @param id The ID of the book to be updated
+     * @return String containing the SQL query
+     */
+    public String buildQuery(Book book, int id){
+        String sqlQuery = "UPDATE books SET ";
+        boolean[] isFirst = {true};
+
+        sqlQuery += addField("title", book.getTitle(), isFirst);
+        sqlQuery += addField("author", book.getAuthor(), isFirst);
+        sqlQuery += addField("isbn", book.getIsbn(), isFirst);
+        sqlQuery += addField("price", book.getPrice(), isFirst);
+
+        sqlQuery += " WHERE id=" + id;
+
+        return sqlQuery;
+    }
+
+    /**
      * Inserts a book into the H2 database
      *
      * @param book The book to be inserted
@@ -251,39 +315,9 @@ public class BookDAO {
      * @throws SQLException
      */
     public Book updateFields(Book book, int id) throws SQLException {
-        String sqlQuery = "UPDATE books SET ";
-        boolean first = true;
+        String sqlQuery = buildQuery(book, id);
 
-        System.out.println(book);
-        if (book.getTitle() != null && !book.getTitle().isEmpty()) {
-            sqlQuery += "title='" + book.getTitle() + "'";
-            first = false;
-        }
-        if (book.getAuthor() != null && !book.getAuthor().isEmpty()) {
-            if (!first) sqlQuery += ", ";
-
-            sqlQuery += "author='" + book.getAuthor() + "'";
-
-            if (first) first = false;
-        }
-        if (book.getIsbn() != null && !book.getIsbn().isEmpty()) {
-
-            if (!first) sqlQuery += ", ";
-
-            sqlQuery += "isbn='" + book.getIsbn() + "'";
-
-            if (first) first = false;
-        }
-        if (book.getPrice() > 0.0) {
-
-            if (!first) sqlQuery += ", ";
-
-            sqlQuery += "price=" + book.getPrice();
-        }
-
-        sqlQuery += " WHERE id=" + id;
         execute(sqlQuery);
-
 
         this.connection.close();
 
