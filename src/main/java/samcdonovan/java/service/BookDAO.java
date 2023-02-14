@@ -1,6 +1,7 @@
 package samcdonovan.java.service;
 
 import samcdonovan.java.model.Book;
+import samcdonovan.java.service.DAOUtils;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.List;
 /**
  * Data Access Object for Books
  */
-public class BookDAO {
+public class BookDAO implements DAO {
 
     private Connection connection; // SQL connection variable
 
@@ -19,137 +20,12 @@ public class BookDAO {
     public BookDAO() {
     }
 
-    /**
-     * Creates a new H2 connection using H2 credentials
-     * and sets class variable 'connection' to this new connection
-     *
-     * @throws SQLException
-     */
-    public void newConnection() throws SQLException {
-        String jdbcURL = "jdbc:h2:mem:bookstoredb";
-        String username = "sa";
-        String password = "";
-
-        this.connection = DriverManager.getConnection(jdbcURL, username, password);
-        System.out.println("H2 connection has started!");
+    public void setConnection(Connection connection){
+        this.connection = connection;
     }
 
-    /**
-     * Helper function to set up a H2 connection and then
-     * run the 'executeQuery' function to return elements from the database.
-     *
-     * @param query SQL query to run through H2
-     * @return ResultSet The result from running the SQL query
-     * @throws SQLException
-     */
-    public ResultSet executeQuery(String query) throws SQLException {
-        newConnection();
-
-        Statement statement = this.connection.createStatement();
-
-        return statement.executeQuery(query);
-    }
-
-    /**
-     * Helper function set up a H2 connection and run CREATE, UPDATE
-     * and DELETE functions.
-     *
-     * @param query SQL query to run through H2
-     * @throws SQLException
-     */
-    public int execute(String query) throws SQLException {
-        newConnection();
-
-        Statement statement = this.connection.createStatement();
-        return statement.executeUpdate(query);
-       /* while(statement.getGeneratedKeys().next()){
-            System.out.println(statement.getGeneratedKeys().getInt("id"));
-        }*/
-
-    }
-
-    /**
-     * Helper function that maps a ResultSet (from an SQL query)
-     * into a book object.
-     *
-     * @param resultSet The result produce from running an SQL query
-     * @return Book A book object containing the data from the query
-     * @throws SQLException
-     */
-    public Book mapToBook(ResultSet resultSet) throws SQLException {
-        Book book = new Book();
-
-        book.setId(resultSet.getInt("id"));
-        book.setTitle(resultSet.getString("title"));
-        book.setAuthor(resultSet.getString("author"));
-        book.setIsbn(resultSet.getString("isbn"));
-        book.setPrice(resultSet.getDouble("price"));
-
-        return book;
-    }
-
-    /**
-     * Adds fields to an SQL query based on the parameters
-     *
-     * @param fieldName The name of the field to be added
-     * @param fieldVal The value of the field to be added (String)
-     * @param isFirst Flag to see if this is the first field in the query or not
-     * @return String containing the field to be added to an SQL query
-     */
-    public String addField(String fieldName, String fieldVal, boolean[] isFirst){
-        String fieldString = "";
-        if (fieldVal != null && !fieldVal.isEmpty()) {
-            if (!isFirst[0]) fieldString += ", ";
-
-            fieldString += fieldName + "='" + fieldVal + "'";
-
-            if(isFirst[0]) isFirst[0] = false;
-        }
-        return fieldString;
-    }
-
-    /**
-     * Adds fields to an SQL query based on the parameters
-     *
-     * @param fieldName The name of the field to be added
-     * @param fieldVal The value of the field to be added (double)
-     * @param isFirst Flag to see if this is the first field in the query or not
-     * @return String containing the field to be added to an SQL query
-     */
-    public String addField(String fieldName, double fieldVal, boolean[] isFirst){
-        String fieldString = "";
-
-        if (fieldVal > 0.0) {
-
-            if (!isFirst[0]) fieldString += ", ";
-
-            fieldString += fieldName + "=" + fieldVal;
-
-            if(isFirst[0]) isFirst[0] = false;
-        }
-
-        return fieldString;
-    }
-
-    /**
-     * Builds an update query based on the fields passed through the book object
-     *
-     * @param book The fields to update the database with
-     * @param id The ID of the book to be updated
-     * @return String containing the SQL query
-     */
-    public String buildQuery(Book book, int id){
-        String sqlQuery = "UPDATE books SET ";
-        boolean[] isFirst = {true};
-
-        sqlQuery += addField("title", book.getTitle(), isFirst);
-        sqlQuery += addField("author", book.getAuthor(), isFirst);
-        sqlQuery += addField("isbn", book.getIsbn(), isFirst);
-        sqlQuery += addField("price", book.getPrice(), isFirst);
-
-        sqlQuery += " WHERE id=" + id;
-
-        return sqlQuery;
+    public Connection getConnection(){
+        return this.connection;
     }
 
     /**
@@ -166,7 +42,7 @@ public class BookDAO {
                 + book.getIsbn() + "', " + book.getPrice() + ")";
 
         try {
-            execute(query);
+            DAOUtils.execute(this.connection, query);
             //book.setId(executedStatement.getGeneratedKeys().getInt(0));
 
         } catch (Exception exception) {
@@ -183,16 +59,16 @@ public class BookDAO {
      *
      * @return List A list containing all the books
      */
-    public List<Book> findAll() throws SQLException {
+    public List<Book> getAll() throws SQLException {
 
-        ResultSet resultSet = executeQuery("SELECT * FROM books");
+        ResultSet resultSet = DAOUtils.executeQuery(this.connection, "SELECT * FROM books");
 
         Book book = new Book();
         List<Book> bookList = new ArrayList<>();
 
         try {
             while (resultSet.next()) {
-                book = mapToBook(resultSet);
+                book = DAOUtils.mapToBook(resultSet);
                 bookList.add(book);
             }
         } catch (Exception exception) {
@@ -210,14 +86,14 @@ public class BookDAO {
      * @param id The ID of the book
      * @return Book The book from the database with the specified ID
      */
-    public Book findById(int id) throws SQLException {
+    public Book get(int id) throws SQLException {
 
-        ResultSet resultSet = executeQuery("SELECT * FROM books WHERE id=" + id);
+        ResultSet resultSet = DAOUtils.executeQuery(this.connection, "SELECT * FROM books WHERE id=" + id);
 
         Book book = null;
         try {
             while (resultSet.next()) {
-                book = mapToBook(resultSet);
+                book = DAOUtils.mapToBook(resultSet);
             }
         } catch (Exception exception) {
             System.out.println(exception);
@@ -236,7 +112,7 @@ public class BookDAO {
      */
     public List<Book> findByAuthor(String author) throws SQLException {
 
-        ResultSet resultSet = executeQuery("SELECT * FROM books " +
+        ResultSet resultSet = DAOUtils.executeQuery(this.connection, "SELECT * FROM books " +
                 "WHERE LOWER(author) LIKE LOWER('%" + author + "%')");
 
         Book book = new Book();
@@ -245,7 +121,7 @@ public class BookDAO {
         try {
             while (resultSet.next()) {
 
-                book = mapToBook(resultSet);
+                book = DAOUtils.mapToBook(resultSet);
                 bookList.add(book);
             }
         } catch (Exception exception) {
@@ -265,7 +141,7 @@ public class BookDAO {
      */
     public List<Book> findByTitle(String title) throws SQLException {
 
-        ResultSet resultSet = executeQuery("SELECT * FROM books " +
+        ResultSet resultSet = DAOUtils.executeQuery(this.connection, "SELECT * FROM books " +
                 "WHERE LOWER(title) LIKE LOWER('%" + title + "%')");
 
         Book book = new Book();
@@ -274,7 +150,7 @@ public class BookDAO {
         try {
             while (resultSet.next()) {
 
-                book = mapToBook(resultSet);
+                book = DAOUtils.mapToBook(resultSet);
                 bookList.add(book);
             }
         } catch (Exception exception) {
@@ -294,9 +170,9 @@ public class BookDAO {
      * @return The newly updated book
      * @throws SQLException
      */
-    public Book updateBook(Book book, int id) throws SQLException {
+    public Book updateDocument(Book book, int id) throws SQLException {
 
-        execute("UPDATE books SET title='" + book.getTitle() +
+        DAOUtils.execute(this.connection, "UPDATE books SET title='" + book.getTitle() +
                 "', author='" + book.getAuthor() + "', isbn='" + book.getIsbn() +
                 "', price=" + book.getPrice() + " WHERE id=" + id);
 
@@ -315,9 +191,9 @@ public class BookDAO {
      * @throws SQLException
      */
     public Book updateFields(Book book, int id) throws SQLException {
-        String sqlQuery = buildQuery(book, id);
+        String sqlQuery = DAOUtils.buildQuery(book, id);
 
-        execute(sqlQuery);
+        DAOUtils.execute(this, sqlQuery);
 
         this.connection.close();
 
@@ -330,8 +206,8 @@ public class BookDAO {
      * @param id The ID of the book to be deleted.
      * @throws SQLException
      */
-    public boolean deleteBookById(int id) throws SQLException {
-        int success = execute("DELETE FROM books WHERE id=" + id);
+    public boolean delete(int id) throws SQLException {
+        int success = DAOUtils.execute(this, "DELETE FROM books WHERE id=" + id);
 
         this.connection.close();
 
@@ -343,8 +219,8 @@ public class BookDAO {
      *
      * @throws SQLException
      */
-    public void deleteAllBooks() throws SQLException {
-        execute("DELETE FROM books");
+    public void deleteAll() throws SQLException {
+        DAOUtils.execute(this, "DELETE FROM books");
 
         this.connection.close();
     }
