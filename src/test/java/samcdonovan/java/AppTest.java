@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import samcdonovan.java.controller.BookController;
 import samcdonovan.java.model.Book;
@@ -91,8 +92,23 @@ public class AppTest {
     @Test
     @DisplayName("PUT path /books/{id}; updates document with given ID")
     public void putPathCorrectlyUpdates() throws Exception {
+        Book testBook = new Book("PutTestTitle", "PutTestAuthor", "000000000000", 12.34);
 
+        ObjectMapper objMapper = new ObjectMapper();
+        String bookJson = objMapper.writeValueAsString(testBook);
 
+        mockMvc.perform(put("/books/6")
+                        .content(String.valueOf(bookJson))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/books/6")).andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id", is(6)))
+                .andExpect(jsonPath("$.title", is("PutTestTitle")))
+                .andExpect(jsonPath("$.author", is("PutTestAuthor")))
+                .andExpect(jsonPath("$.isbn", is("000000000000")))
+                .andExpect(jsonPath("$.price", is(12.34)));
     }
 
     @Test
@@ -107,6 +123,4 @@ public class AppTest {
                 .andExpect(status().isNotFound());
 
     }
-
-
 }
