@@ -42,7 +42,7 @@ GET
 ### UPDATE<a name = "update"></a>
 PUT
 - `/books{id}`
-  - `/books/5`
+  - `/books/5` - Updates book with ID 5 with the new book object
     - JSON example:
     ```JSON
     {
