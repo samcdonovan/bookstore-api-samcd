@@ -52,6 +52,24 @@ PUT
       "price": 2.5
     }
     ```
+
+PATCH
+- /books/{id}
+  - /books/2 - Updates book with ID 2 with new fields
+    - JSON example:
+    ```JSON
+    {
+    "title": "Example PATCH title"
+    }
+    ```
+  - /books/4 - Updates book with ID 4 with new fields
+    - JSON example:
+    ```JSON
+    {
+    "author": "Example PATCH author",
+    "price": 8.99
+    }
+    ```
 ### DELETE<a name = "delete"></a>
 DELETE
 - `/books` - Deletes ALL books from the 'books' table
