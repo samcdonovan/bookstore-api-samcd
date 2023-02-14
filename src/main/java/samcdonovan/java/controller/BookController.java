@@ -49,7 +49,11 @@ public class BookController {
         List<Book> bookList = new ArrayList<>();
         try {
             bookList = dao.findAll();
-            return new ResponseEntity<>(bookList, HttpStatus.OK);
+            if (bookList.size() > 0) {
+                return new ResponseEntity<>(bookList, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(bookList, HttpStatus.NO_CONTENT);
+            }
         } catch (Exception exception) {
             System.out.println(exception);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -67,7 +71,7 @@ public class BookController {
         Book book = null;
         try {
             book = dao.findById(id);
-            if(book != null) {
+            if (book != null) {
                 return new ResponseEntity<>(book, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -123,15 +127,30 @@ public class BookController {
     public ResponseEntity<Book> deleteBook(@PathVariable("id") Integer id) {
         try {
             boolean success = dao.deleteBookById(id);
-            if(success) {
+            if (success) {
                 return new ResponseEntity<>(null, HttpStatus.OK);
-            }
-            else {
+            } else {
                 return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
             }
         } catch (Exception exception) {
             System.out.println(exception);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * DELETE path for deleting all books in the table
+     *
+     * @return ResponseEntity containing a HTTP status code
+     */
+    @DeleteMapping("/books")
+    public ResponseEntity<HttpStatus> deleteAllBooks() {
+        try {
+            dao.deleteAllBooks();
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception exception) {
+            System.out.println(exception);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

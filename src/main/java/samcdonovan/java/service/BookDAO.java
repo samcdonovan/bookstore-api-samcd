@@ -226,4 +226,15 @@ public class BookDAO {
 
         return success > 0 ? true : false;
     }
+
+    /**
+     * Deletes all rows from the 'books' table
+     *
+     * @throws SQLException
+     */
+    public void deleteAllBooks() throws SQLException {
+        execute("DELETE FROM books");
+
+        this.connection.close();
+    }
 }

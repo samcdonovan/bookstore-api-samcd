@@ -1,7 +1,6 @@
 package samcdonovan.java;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,6 +23,7 @@ import samcdonovan.java.model.Book;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class AppTest {
 
     @Autowired
@@ -33,12 +33,14 @@ public class AppTest {
     private MockMvc mockMvc;
 
     @Test
+    @Order(1)
     @DisplayName("Book controller loads and is not null")
     public void controllerLoads() throws Exception {
         assertThat(bookController).isNotNull();
     }
 
     @Test
+    @Order(3)
     @DisplayName("POST path /books; inserts document into database correctly")
     public void postPathCorrectlyInserts() throws Exception {
         Book testBook = new Book("TestTitle", "TestAuthor", "1111111111111", 9.6);
@@ -52,6 +54,7 @@ public class AppTest {
     }
 
     @Test
+    @Order(2)
     @DisplayName("GET path /books; retrieves all documents in database")
     public void getPathRetrievesAllDocuments() throws Exception {
 
@@ -62,6 +65,7 @@ public class AppTest {
     }
 
     @Test
+    @Order(4)
     @DisplayName("GET path /books/{id}; retrieves document with correct ID")
     public void getPathRetrievesCorrectId() throws Exception {
 
@@ -76,6 +80,7 @@ public class AppTest {
     }
 
     @Test
+    @Order(5)
     @DisplayName("GET path /books?author={author}; retrieves documents with authors containing the given name")
     public void getPathRetrievesBooksWithGivenAuthor() throws Exception {
 
@@ -90,6 +95,7 @@ public class AppTest {
     }
 
     @Test
+    @Order(6)
     @DisplayName("PUT path /books/{id}; updates document with given ID")
     public void putPathCorrectlyUpdates() throws Exception {
         Book testBook = new Book("PutTestTitle", "PutTestAuthor", "000000000000", 12.34);
@@ -112,6 +118,7 @@ public class AppTest {
     }
 
     @Test
+    @Order(7)
     @DisplayName("DELETE path /books/{id}; deletes document with given ID")
     public void deletePathCorrectlyDeletes() throws Exception {
         mockMvc.perform(delete("/books/4"))
@@ -122,5 +129,18 @@ public class AppTest {
         mockMvc.perform(get("/books/4"))
                 .andExpect(status().isNotFound());
 
+    }
+
+    @Test
+    @Order(8)
+    @DisplayName("DELETE path /books; deletes all rows in 'books' table")
+    public void deleteAllBooks() throws Exception {
+        mockMvc.perform(delete("/books"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").doesNotExist());
+
+        mockMvc.perform(get("/books"))
+                .andExpect(status().isNoContent())
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 }
