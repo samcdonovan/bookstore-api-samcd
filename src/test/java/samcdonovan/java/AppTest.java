@@ -2,7 +2,9 @@ package samcdonovan.java;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
 import static org.assertj.core.api.Assertions.assertThat;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -11,9 +13,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -39,7 +40,12 @@ public class AppTest {
     @Test
     @DisplayName("POST path /books; inserts document into database correctly")
     public void postPathCorrectlyInserts() throws Exception {
+        Book testBook = new Book("TestTitle", "TestAuthor", "1111111111111", 9.6);
 
+        mockMvc.perform(post("/books")
+                        .content(String.valueOf(testBook))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
     }
 
     @Test
@@ -84,7 +90,7 @@ public class AppTest {
     @DisplayName("PUT path /books/{id}; updates document with given ID")
     public void putPathCorrectlyUpdates() throws Exception {
 
-        
+
     }
 
     @Test
@@ -99,7 +105,6 @@ public class AppTest {
                 .andExpect(status().isNotFound());
 
     }
-
 
 
 }
