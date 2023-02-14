@@ -67,7 +67,11 @@ public class BookController {
         Book book = null;
         try {
             book = dao.findById(id);
-            return new ResponseEntity<>(book, HttpStatus.OK);
+            if(book != null) {
+                return new ResponseEntity<>(book, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            }
         } catch (Exception exception) {
             System.out.println(exception);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -116,13 +120,18 @@ public class BookController {
      * @param id The ID of the book to be deleted
      */
     @DeleteMapping("/books/{id}")
-    public ResponseEntity<HttpStatus> deleteBook(@PathVariable("id") Integer id) {
+    public ResponseEntity<Book> deleteBook(@PathVariable("id") Integer id) {
         try {
-            dao.deleteBookById(id);
-            return new ResponseEntity<>(HttpStatus.OK);
+            boolean success = dao.deleteBookById(id);
+            if(success) {
+                return new ResponseEntity<>(null, HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            }
         } catch (Exception exception) {
             System.out.println(exception);
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

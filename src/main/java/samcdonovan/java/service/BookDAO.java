@@ -57,15 +57,15 @@ public class BookDAO {
      * @param query SQL query to run through H2
      * @throws SQLException
      */
-    public Statement execute(String query) throws SQLException {
+    public int execute(String query) throws SQLException {
         newConnection();
 
         Statement statement = this.connection.createStatement();
-        statement.execute(query);
+        return statement.executeUpdate(query);
        /* while(statement.getGeneratedKeys().next()){
             System.out.println(statement.getGeneratedKeys().getInt("id"));
         }*/
-        return statement;
+
     }
 
     /**
@@ -102,8 +102,8 @@ public class BookDAO {
                 + book.getIsbn() + "', " + book.getPrice() + ")";
 
         try {
-            Statement executedStatement = execute(query);
-            book.setId(executedStatement.getGeneratedKeys().getInt(0));
+            execute(query);
+            //book.setId(executedStatement.getGeneratedKeys().getInt(0));
 
         } catch (Exception exception) {
             System.out.println(exception);
@@ -219,9 +219,11 @@ public class BookDAO {
      * @param id The ID of the book to be deleted.
      * @throws SQLException
      */
-    public void deleteBookById(int id) throws SQLException {
-        execute("DELETE FROM books WHERE id=" + id);
+    public boolean deleteBookById(int id) throws SQLException {
+        int success = execute("DELETE FROM books WHERE id=" + id);
 
         this.connection.close();
+
+        return success > 0 ? true : false;
     }
 }
