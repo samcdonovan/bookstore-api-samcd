@@ -1,0 +1,15 @@
+version: '3'
+services:
+  api-server:
+    container_name: docker-bookstore-api
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: docker-bookstore-api:latest
+    ports:
+      - 3000:3000
+    networks:
+      - spring-cloud-network
+networks:
+  spring-cloud-network:
+    driver: bridge

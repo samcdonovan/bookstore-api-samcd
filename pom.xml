@@ -69,6 +69,8 @@
 
     <build>
         <plugins>
+
+            <!-- Spring jar packaging -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -76,6 +78,7 @@
                     <outputDirectory>./</outputDirectory>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 
