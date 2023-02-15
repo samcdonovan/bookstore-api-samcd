@@ -17,7 +17,7 @@
 ## Setup<a name = "setup"></a>
 ### Install and run through command line
  ```
- git clone https://github.com/samcdonovan/Bookstore-API.git
+ git clone https://github.com/samcdonovan/bookstore-api-samcd.git
  cd bookstore-api-samcd
  java -jar .\bookstore-api-1.0.0.jar
  ```
