@@ -18,7 +18,7 @@
 ### Install and run through command line
  ```
  git clone https://github.com/samcdonovan/Bookstore-API.git
- cd Bookstore-API
+ cd bookstore-api-samcd
  java -jar .\frogAPI-1.0.0.jar
  ```
 
