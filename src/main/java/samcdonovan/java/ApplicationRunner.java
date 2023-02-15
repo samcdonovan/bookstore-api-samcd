@@ -9,6 +9,7 @@ import org.springframework.context.event.EventListener;
 public class ApplicationRunner {
     public static void main(String[] args) {
 
+        /* run the Spring App using this main class */
         SpringApplication.run(ApplicationRunner.class, args);
 
     }

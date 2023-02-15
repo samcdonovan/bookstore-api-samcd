@@ -119,7 +119,7 @@ public class AppTest {
         mockMvc.perform(get("/books?isbn=9780261103570"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$", hasSize(1))) // should only return one document
                 .andExpect(jsonPath("$[0].isbn", is("9780261103570")));
     }
 
@@ -128,6 +128,8 @@ public class AppTest {
     @DisplayName("GET path /books?title={title}&author={author}; retrieves documents containing given title and author")
     public void getRetrievesBookWithTitleAndAuthor() throws Exception {
 
+        /* check that doing a combination search with a title of 'the' and an author
+        of 'george' returns only documents containing those parameters */
         mockMvc.perform(get("/books?title=the&author=george"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -145,13 +147,14 @@ public class AppTest {
         Book testBook = new Book("PutTestTitle", "PutTestAuthor", "000000000000", 12.34);
 
         ObjectMapper objMapper = new ObjectMapper();
-        String bookJson = objMapper.writeValueAsString(testBook);
+        String bookJson = objMapper.writeValueAsString(testBook); // map book to json
 
         mockMvc.perform(put("/books/6")
                         .content(String.valueOf(bookJson))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
+        /* check that book with ID 6 has been changed to the test book */
         mockMvc.perform(get("/books/6")).andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(6)))
@@ -169,13 +172,15 @@ public class AppTest {
 
         ObjectMapper objMapper = new ObjectMapper();
         objMapper.configure(ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
-        String bookJson = objMapper.writeValueAsString(testBook);
+        String bookJson = objMapper.writeValueAsString(testBook); // map book to json
 
+        /* update title field of book */
         mockMvc.perform(patch("/books/3")
                         .content(String.valueOf(bookJson))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
+        /* check that the title field has been updated */
         mockMvc.perform(get("/books/3")).andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(3)))
@@ -184,6 +189,7 @@ public class AppTest {
                 .andExpect(jsonPath("$.isbn", is("9780261103580")))
                 .andExpect(jsonPath("$.price", is(6.5)));
 
+        /* update multiple fields */
         testBook.setAuthor("PatchTestAuthor");
         testBook.setIsbn("2222222222222");
         testBook.setTitle(null);
@@ -194,6 +200,7 @@ public class AppTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
+        /* check that the books' fields reflect the new changes */
         mockMvc.perform(get("/books/3")).andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(3)))
@@ -207,11 +214,14 @@ public class AppTest {
     @Order(6)
     @DisplayName("DELETE path /books/{id}; deletes document with given ID")
     public void deletePathCorrectlyDeletes() throws Exception {
+
+        /* delete book with ID 4 */
         mockMvc.perform(delete("/books/4"))
                 .andExpect(status().isOk())
-                //.andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$").doesNotExist());
 
+
+        /* check that book with ID 4 no longer exists */
         mockMvc.perform(get("/books/4"))
                 .andExpect(status().isNotFound());
 
@@ -221,10 +231,13 @@ public class AppTest {
     @Order(7)
     @DisplayName("DELETE path /books; deletes all rows in 'books' table")
     public void deleteAllBooks() throws Exception {
+
+        /* delete all books using delete path */
         mockMvc.perform(delete("/books"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").doesNotExist());
 
+        /* check that get all books returns NO_CONTENT */
         mockMvc.perform(get("/books"))
                 .andExpect(status().isNoContent())
                 .andExpect(jsonPath("$", hasSize(0)));

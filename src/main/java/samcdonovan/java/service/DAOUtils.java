@@ -13,6 +13,11 @@ import java.util.ArrayList;
  */
 public class DAOUtils {
 
+    /* H2 database credentials */
+    private final static String jdbcURL = "jdbc:h2:mem:bookstoredb";
+    private final static String username = "sa";
+    private final static String password = "";
+
     /**
      * Creates a new H2 connection using H2 credentials
      * and sets class variable 'connection' to this new connection
@@ -20,12 +25,10 @@ public class DAOUtils {
      * @throws SQLException
      */
     public static void newConnection(DAO dao) throws SQLException {
-        String jdbcURL = "jdbc:h2:mem:bookstoredb";
-        String username = "sa";
-        String password = "";
 
+        /* setup H2 connection using credentials */
         dao.setConnection(DriverManager.getConnection(jdbcURL, username, password));
-        System.out.println("H2 connection has started!");
+        System.out.println("H2 connection established!");
     }
 
     /**
@@ -37,10 +40,12 @@ public class DAOUtils {
      * @throws SQLException
      */
     public static ResultSet executeQuery(DAO dao, String query) throws SQLException {
-        newConnection(dao);
+        newConnection(dao); // create new H2 connection
 
+        /* create Statement object */
         Statement statement = dao.getConnection().createStatement();
 
+        /* execute query using executeQuery */
         return statement.executeQuery(query);
     }
 
@@ -51,15 +56,14 @@ public class DAOUtils {
      * @param query SQL query to run through H2
      * @throws SQLException
      */
-    public static int execute(DAO dao, String query) throws SQLException {
-        newConnection(dao);
+    public static int executeUpdate(DAO dao, String query) throws SQLException {
+        newConnection(dao); // create new H2 connection
 
+        /* create Statement object */
         Statement statement = dao.getConnection().createStatement();
-        return statement.executeUpdate(query);
-       /* while(statement.getGeneratedKeys().next()){
-            System.out.println(statement.getGeneratedKeys().getInt("id"));
-        }*/
 
+        /* execute query using executeUpdate */
+        return statement.executeUpdate(query);
     }
 
     /**
@@ -83,16 +87,19 @@ public class DAOUtils {
     }
 
     /**
-     * Adds fields to an SQL query based on the parameters
+     * Adds fields to a WHERE clause in a SQL query based on the parameters (String)
      *
      * @param fieldName The name of the field to be added
      * @param fieldVal The value of the field to be added (String)
-     * @param isFirst Flag to see if this is the first field in the query or not
+     * @param isFirst Flag to see if this is the first field in the query
      * @return String containing the field to be added to an SQL query
      */
     public static String addField(String fieldName, String fieldVal, boolean[] isFirst){
         String fieldString = "";
+
+        /* if field is not empty, add it to the query */
         if (fieldVal != null && !fieldVal.isEmpty()) {
+            /* if it is not the first field in the query, append a comma */
             if (!isFirst[0]) fieldString += ", ";
 
             fieldString += fieldName + "='" + fieldVal + "'";
@@ -103,16 +110,17 @@ public class DAOUtils {
     }
 
     /**
-     * Adds fields to an SQL query based on the parameters
+     * Adds fields to a WHERE clause in a SQL query based on the parameters (double)
      *
      * @param fieldName The name of the field to be added
      * @param fieldVal The value of the field to be added (double)
-     * @param isFirst Flag to see if this is the first field in the query or not
+     * @param isFirst Flag to see if this is the first field in the query
      * @return String containing the field to be added to an SQL query
      */
     public static String addField(String fieldName, double fieldVal, boolean[] isFirst){
         String fieldString = "";
 
+        /* if double value is valid/not empty */
         if (fieldVal > 0.0) {
 
             if (!isFirst[0]) fieldString += ", ";
@@ -136,6 +144,8 @@ public class DAOUtils {
         String sqlQuery = "UPDATE books SET ";
         boolean[] isFirst = {true};
 
+        /* call local addField function to add the specified field to
+        the query string only if it is not empty or null */
         sqlQuery += addField("title", book.getTitle(), isFirst);
         sqlQuery += addField("author", book.getAuthor(), isFirst);
         sqlQuery += addField("isbn", book.getIsbn(), isFirst);
@@ -158,22 +168,27 @@ public class DAOUtils {
         String[] paramArr;
         int paramCount = 0;
 
+        /* build list containing only the parameters which are not null */
         ArrayList<String> paramList = new ArrayList<String>();
         for (String param : params) {
             if (param!= null) paramList.add(param);
         }
 
+        /* loop through non-null parameter list */
         for (String param : paramList) {
 
+            /* build query by using param name and value */
             paramArr = param.split(":");
             sqlQuery += "LOWER(" + paramArr[0] + ") LIKE LOWER('%"
                     + paramArr[1] + "%')";
 
-            if (paramCount >= 0 && paramCount < paramList.size() - 1) sqlQuery += " AND ";
+            /* if there are more parameters in the list, append 'AND' to query */
+            if (paramCount >= 0 && paramCount < paramList.size() - 1)
+                sqlQuery += " AND ";
+
             paramCount++;
         }
 
         return sqlQuery;
-
     }
 }

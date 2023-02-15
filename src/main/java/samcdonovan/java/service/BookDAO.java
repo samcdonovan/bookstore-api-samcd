@@ -19,6 +19,7 @@ public class BookDAO implements DAO<Book> {
     public BookDAO() {
     }
 
+    /* Getter and setter for H2 connection variable */
     public Connection getConnection() {
         return this.connection;
     }
@@ -40,13 +41,13 @@ public class BookDAO implements DAO<Book> {
                 + book.getIsbn() + "', " + book.getPrice() + ")";
 
         try {
-            DAOUtils.execute(this, query);
+            DAOUtils.executeUpdate(this, query);
             //book.setId(executedStatement.getGeneratedKeys().getInt(0));
 
         } catch (Exception exception) {
             System.out.println(exception);
         } finally {
-            this.connection.close();
+            this.connection.close(); // close H2 connection
         }
     }
 
@@ -57,12 +58,15 @@ public class BookDAO implements DAO<Book> {
      */
     public List<Book> getAll() throws SQLException {
 
+        /* execute SELECT all query */
         ResultSet resultSet = DAOUtils.executeQuery(this, "SELECT * FROM books");
 
         Book book = new Book();
         List<Book> bookList = new ArrayList<>();
 
         try {
+
+            /* map resultSet to book objects and add to list */
             while (resultSet.next()) {
                 book = DAOUtils.mapToBook(resultSet);
                 bookList.add(book);
@@ -70,7 +74,7 @@ public class BookDAO implements DAO<Book> {
         } catch (Exception exception) {
             System.out.println(exception);
         } finally {
-            this.connection.close();
+            this.connection.close(); // close H2 connection
         }
 
         return bookList;
@@ -84,17 +88,19 @@ public class BookDAO implements DAO<Book> {
      */
     public Book get(int id) throws SQLException {
 
+        /* execute H2 SELECT query */
         ResultSet resultSet = DAOUtils.executeQuery(this, "SELECT * FROM books WHERE id=" + id);
 
         Book book = null;
         try {
+            /* map result onto book object */
             while (resultSet.next()) {
                 book = DAOUtils.mapToBook(resultSet);
             }
         } catch (Exception exception) {
             System.out.println(exception);
         } finally {
-            this.connection.close();
+            this.connection.close(); // close H2 connection
         }
 
         return book;
@@ -108,22 +114,24 @@ public class BookDAO implements DAO<Book> {
      */
     public List<Book> get(String... params) throws SQLException {
 
+        /* build the query */
         String sqlQuery = DAOUtils.buildSelectQuery(params);
-        
+
+        /* execute the query */
         ResultSet resultSet = DAOUtils.executeQuery(this, sqlQuery);
         Book book = new Book();
         List<Book> bookList = new ArrayList<>();
 
         try {
+            /* map resultSet to book objects and add to list */
             while (resultSet.next()) {
-
                 book = DAOUtils.mapToBook(resultSet);
                 bookList.add(book);
             }
         } catch (Exception exception) {
             System.out.println(exception);
         } finally {
-            this.connection.close();
+            this.connection.close(); // close H2 connection
         }
 
         return bookList;
@@ -139,12 +147,13 @@ public class BookDAO implements DAO<Book> {
      */
     public Book updateDocument(Book book, int id) throws SQLException {
 
-        DAOUtils.execute(this, "UPDATE books SET title='" + book.getTitle() +
+        /* execute UPDATE query; since this is a PUT request, all fields must be sent */
+        DAOUtils.executeUpdate(this, "UPDATE books SET title='" + book.getTitle() +
                 "', author='" + book.getAuthor() + "', isbn='" + book.getIsbn() +
                 "', price=" + book.getPrice() + " WHERE id=" + id);
 
 
-        this.connection.close();
+        this.connection.close(); // close H2 connection
 
         return book;
     }
@@ -158,11 +167,13 @@ public class BookDAO implements DAO<Book> {
      * @throws SQLException
      */
     public Book updateFields(Book book, int id) throws SQLException {
+
+        /* build UPDATE query and execute */
         String sqlQuery = DAOUtils.buildUpdateQuery(book, id);
 
-        DAOUtils.execute(this, sqlQuery);
+        DAOUtils.executeUpdate(this, sqlQuery);
 
-        this.connection.close();
+        this.connection.close(); // close H2 connection
 
         return book;
     }
@@ -174,9 +185,11 @@ public class BookDAO implements DAO<Book> {
      * @throws SQLException
      */
     public boolean delete(int id) throws SQLException {
-        int success = DAOUtils.execute(this, "DELETE FROM books WHERE id=" + id);
 
-        this.connection.close();
+        /* execute DELETE query */
+        int success = DAOUtils.executeUpdate(this, "DELETE FROM books WHERE id=" + id);
+
+        this.connection.close(); // close H2 connection
 
         return success > 0 ? true : false;
     }
@@ -187,8 +200,10 @@ public class BookDAO implements DAO<Book> {
      * @throws SQLException
      */
     public void deleteAll() throws SQLException {
-        DAOUtils.execute(this, "DELETE FROM books");
 
-        this.connection.close();
+        /* execute DELETE all query */
+        DAOUtils.executeUpdate(this, "DELETE FROM books");
+
+        this.connection.close(); // close H2 connection
     }
 }

@@ -47,29 +47,33 @@ public class BookController {
      * it retrieves all books from the database, otherwise it performs a search
      * based on the parameters that were passed.
      *
-     * @param title The title to search for
+     * @param title  The title to search for
      * @param author The author to search for
-     * @param isbn The ISBN to search for
+     * @param isbn   The ISBN to search for
      * @return ResponseEntity containing the list of books from the database and
      * a HTTP status code for the request
      */
     @GetMapping(value = "/books")
-    public ResponseEntity<List<Book>> getBooks(
-            @RequestParam(required = false) String title, @RequestParam(required = false) String author,
-            @RequestParam(required = false) String isbn) {
+    public ResponseEntity<List<Book>> getBooks(@RequestParam(required = false) String title,
+                                               @RequestParam(required = false) String author,
+                                               @RequestParam(required = false) String isbn) {
         List<Book> bookList = new ArrayList<>();
 
+        /* if the respective param exists, append the param name to it */
         if (title != null) title = "title:" + title;
         if (author != null) author = "author:" + author;
         if (isbn != null) isbn = "isbn:" + isbn;
 
         try {
 
+            /* if all parameters are null, retrieve all books from database */
             if (title == null && author == null && isbn == null) bookList = dao.getAll();
             else bookList = dao.get(title, author, isbn);
 
-            if(bookList.size() > 0) return new ResponseEntity<>(bookList, HttpStatus.OK);
-            else return new ResponseEntity<>(bookList, HttpStatus.NO_CONTENT);
+            /* return NO_CONTENT code if there are no books in db otherwise return OK code */
+            if (bookList.size() == 0) return new ResponseEntity<>(bookList, HttpStatus.NO_CONTENT);
+            else return new ResponseEntity<>(bookList, HttpStatus.OK);
+
         } catch (Exception exception) {
             System.out.println(exception);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
