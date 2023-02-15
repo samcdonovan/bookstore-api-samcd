@@ -19,7 +19,7 @@
  ```
  git clone https://github.com/samcdonovan/Bookstore-API.git
  cd bookstore-api-samcd
- java -jar .\frogAPI-1.0.0.jar
+ java -jar .\bookstore-api-1.0.0.jar
  ```
 
 ## API Endpoints<a name = "endpoints"></a>

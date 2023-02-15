@@ -12,9 +12,9 @@
     </parent>
 
     <groupId>samcdonovan.java</groupId>
-    <artifactId>frogAPI</artifactId>
+    <artifactId>bookstore-api</artifactId>
     <version>1.0.0</version>
-    <name>frogAPI</name>
+    <name>bookstore-api</name>
     <description>RESTful API for Frog bookstore</description>
     <properties>
         <java.version>17</java.version>
