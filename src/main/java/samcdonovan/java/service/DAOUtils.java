@@ -88,11 +88,11 @@ public class DAOUtils {
      * Adds fields to a WHERE clause in a SQL query based on the parameters (String)
      *
      * @param fieldName The name of the field to be added
-     * @param fieldVal The value of the field to be added (String)
-     * @param isFirst Flag to see if this is the first field in the query
+     * @param fieldVal  The value of the field to be added (String)
+     * @param isFirst   Flag to see if this is the first field in the query
      * @return String containing the field to be added to an SQL query
      */
-    public static String addField(String fieldName, String fieldVal, boolean[] isFirst){
+    public static String addField(String fieldName, String fieldVal, boolean[] isFirst) {
         String fieldString = "";
 
         /* if field is not empty, add it to the query */
@@ -102,7 +102,7 @@ public class DAOUtils {
 
             fieldString += fieldName + "='" + fieldVal + "'";
 
-            if(isFirst[0]) isFirst[0] = false;
+            if (isFirst[0]) isFirst[0] = false;
         }
         return fieldString;
     }
@@ -111,11 +111,11 @@ public class DAOUtils {
      * Adds fields to a WHERE clause in a SQL query based on the parameters (double)
      *
      * @param fieldName The name of the field to be added
-     * @param fieldVal The value of the field to be added (double)
-     * @param isFirst Flag to see if this is the first field in the query
+     * @param fieldVal  The value of the field to be added (double)
+     * @param isFirst   Flag to see if this is the first field in the query
      * @return String containing the field to be added to an SQL query
      */
-    public static String addField(String fieldName, double fieldVal, boolean[] isFirst){
+    public static String addField(String fieldName, double fieldVal, boolean[] isFirst) {
         String fieldString = "";
 
         /* if double value is valid/not empty */
@@ -125,7 +125,7 @@ public class DAOUtils {
 
             fieldString += fieldName + "=" + fieldVal;
 
-            if(isFirst[0]) isFirst[0] = false;
+            if (isFirst[0]) isFirst[0] = false;
         }
 
         return fieldString;
@@ -135,10 +135,10 @@ public class DAOUtils {
      * Builds an UDPATE query based on the fields passed through the book object
      *
      * @param book The fields to update the database with
-     * @param id The ID of the book to be updated
+     * @param id   The ID of the book to be updated
      * @return String containing the SQL query
      */
-    public static String buildUpdateQuery(Book book, int id){
+    public static String buildUpdateQuery(Book book, int id) {
         String sqlQuery = "UPDATE books SET ";
         boolean[] isFirst = {true};
 
@@ -160,7 +160,7 @@ public class DAOUtils {
      * @param params String array containing all the parameters
      * @return String containing the SQL query
      */
-    public static String buildSelectQuery(String... params){
+    public static String buildSelectQuery(String... params) {
         String sqlQuery = "SELECT * FROM books WHERE ";
 
         String[] paramArr;
@@ -169,7 +169,7 @@ public class DAOUtils {
         /* build list containing only the parameters which are not null */
         ArrayList<String> paramList = new ArrayList<String>();
         for (String param : params) {
-            if (param!= null) paramList.add(param);
+            if (param != null) paramList.add(param);
         }
 
         /* loop through non-null parameter list */
@@ -177,9 +177,12 @@ public class DAOUtils {
 
             /* build query by using param name and value */
             paramArr = param.split(":");
-            sqlQuery += "LOWER(" + paramArr[0] + ") LIKE LOWER('%"
-                    + paramArr[1] + "%')";
-
+            if(paramArr[0].equals("price")){
+                sqlQuery += "price=" + paramArr[1];
+            } else {
+                sqlQuery += "LOWER(" + paramArr[0] + ") LIKE LOWER('%"
+                        + paramArr[1] + "%')";
+            }
             /* if there are more parameters in the list, append 'AND' to query */
             if (paramCount >= 0 && paramCount < paramList.size() - 1)
                 sqlQuery += " AND ";

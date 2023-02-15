@@ -125,6 +125,20 @@ public class AppTest {
 
     @Test
     @Order(4)
+    @DisplayName("GET path /books?price={price}; retrieves documents with given price")
+    public void getPathRetrievesBooksWithGivenPrice() throws Exception {
+
+        mockMvc.perform(get("/books?price=6.5"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(3))) // should only return one document
+                .andExpect(jsonPath("$[0].price", is(6.5)))
+                .andExpect(jsonPath("$[1].price", is(6.5)))
+                .andExpect(jsonPath("$[2].price", is(6.5)));
+    }
+
+    @Test
+    @Order(4)
     @DisplayName("GET path /books?title={title}&author={author}; retrieves documents containing given title and author")
     public void getRetrievesBookWithTitleAndAuthor() throws Exception {
 

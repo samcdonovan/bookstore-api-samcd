@@ -1,8 +1,6 @@
 package samcdonovan.java.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.fasterxml.jackson.databind.ObjectMapper; // necessary otherwise 406 status code
@@ -11,7 +9,6 @@ import samcdonovan.java.service.BookDAO;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Spring Boot Rest Controller for handling and
@@ -57,10 +54,12 @@ public class BookController {
     @GetMapping(value = "/books")
     public ResponseEntity<List<Book>> getBooks(@RequestParam(required = false) String title,
                                                @RequestParam(required = false) String author,
-                                               @RequestParam(required = false) String isbn) {
+                                               @RequestParam(required = false) String isbn,
+                                               @RequestParam(required = false) Double price) {
 
         List<Book> bookList = new ArrayList<>();
         String message = "GET request at /books?";
+        String priceString = null;
 
         /* if the respective param exists, append the param name to it */
         if (title != null) {
@@ -75,13 +74,17 @@ public class BookController {
             isbn = "isbn:" + isbn;
             message += "isbn=" + isbn;
         }
+        if(price != null){
+            priceString = "price:" + price;
+            message += "price=" + price;
+        }
 
         System.out.println(message); // print message to console
         try {
 
             /* if all parameters are null, retrieve all books from database */
-            if (title == null && author == null && isbn == null) bookList = dao.getAll();
-            else bookList = dao.get(title, author, isbn);
+            if (title == null && author == null && isbn == null && priceString == null) bookList = dao.getAll();
+            else bookList = dao.get(title, author, isbn, priceString);
 
             /* return NO_CONTENT code if there are no books in db otherwise return OK code */
             if (bookList.size() == 0) return new ResponseEntity<>(bookList, HttpStatus.NO_CONTENT);
