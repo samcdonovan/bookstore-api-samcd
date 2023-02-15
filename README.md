@@ -5,6 +5,7 @@
 ---
 
 ## Table of Contents
+- [Setup](#setup)
 - [API Endpoints](#endpoints)
   - [CREATE](#create)
   - [READ](#read)
@@ -12,6 +13,14 @@
   - [DELETE](#delete)
 - [Tools and dependencies](#built_using)
 - [Authors](#authors)
+
+## Setup<a name = "setup"></a>
+### Install and run through command line
+ ```
+ git clone https://github.com/samcdonovan/Bookstore-API.git
+ cd Bookstore-API
+ java -jar .\frogAPI-1.0.0.jar
+ ```
 
 ## API Endpoints<a name = "endpoints"></a>
 Below are the endpoints for the API, with some examples. If the example is a URL, '%20' represents a space in the string.
