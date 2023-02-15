@@ -48,6 +48,7 @@ public class BookController {
      * @param title  The title to search for
      * @param author The author to search for
      * @param isbn   The ISBN to search for
+     * @param price The price to search for
      * @return ResponseEntity containing the list of books from the database and
      * a HTTP status code for the request
      */
@@ -100,7 +101,7 @@ public class BookController {
      * GET path for books with a specific ID
      *
      * @param id The database ID of the book
-     * @return Book The book retrieved from the database
+     * @return ResponseEntity containing the retrieved book and a HTTP status code for this request
      */
     @GetMapping("/books/{id}")
     public ResponseEntity<List<Book>> getBook(@PathVariable Integer id) {
@@ -167,18 +168,18 @@ public class BookController {
      * @return ResponseEntity Containing a HTTP status code for the request
      */
     @DeleteMapping("/books/{id}")
-    public ResponseEntity<Book> deleteBook(@PathVariable("id") Integer id) {
+    public ResponseEntity<HttpStatus> deleteBook(@PathVariable("id") Integer id) {
         System.out.println("DELETE request at /books/" + id);
         try {
             boolean success = dao.delete(id);
             if (success) {
-                return new ResponseEntity<>(null, HttpStatus.OK);
+                return new ResponseEntity<>(HttpStatus.OK);
             } else {
-                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
         } catch (Exception exception) {
             System.out.println(exception);
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

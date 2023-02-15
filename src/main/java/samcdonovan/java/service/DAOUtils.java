@@ -33,7 +33,8 @@ public class DAOUtils {
      * Helper function to set up a H2 connection and then
      * run the 'executeQuery' function to return elements from the database.
      *
-     * @param query SQL query to run through H2
+     * @param dao The DAO to run the query on
+     * @param query The SQL query to pass to H2
      * @return ResultSet The result from running the SQL query
      * @throws SQLException
      */
@@ -51,7 +52,8 @@ public class DAOUtils {
      * Helper function set up a H2 connection and run CREATE, UPDATE
      * and DELETE functions.
      *
-     * @param query SQL query to run through H2
+     * @param dao The DAO to run the query on
+     * @param query The SQL query to pass to H2
      * @throws SQLException
      */
     public static int executeUpdate(DAO dao, String query) throws SQLException {
