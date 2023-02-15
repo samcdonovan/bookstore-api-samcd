@@ -8,7 +8,7 @@ import java.util.List;
  *
  * @param <T> Type of DAO (in this project, only Books will be used)
  */
-public interface DAO <T> {
+public interface DAO<T> {
 
     void setConnection(Connection connection);
 

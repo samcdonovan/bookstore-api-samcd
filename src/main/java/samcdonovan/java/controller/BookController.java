@@ -74,7 +74,7 @@ public class BookController {
             isbn = "isbn:" + isbn;
             message += "isbn=" + isbn;
         }
-        if(price != null){
+        if (price != null) {
             priceString = "price:" + price;
             message += "price=" + price;
         }
@@ -131,7 +131,7 @@ public class BookController {
      */
     @PutMapping("/books/{id}")
     public ResponseEntity<HttpStatus> updateBookByPut(@RequestBody Book book, @PathVariable("id") Integer id) {
-        System.out.println("PUT request at /books/" + id +", body: " + book);
+        System.out.println("PUT request at /books/" + id + ", body: " + book);
         try {
             dao.updateDocument(book, id);
             return new ResponseEntity(HttpStatus.OK);
@@ -150,7 +150,7 @@ public class BookController {
      */
     @PatchMapping("/books/{id}")
     public ResponseEntity<HttpStatus> updateBookByPatch(@RequestBody Book book, @PathVariable("id") Integer id) {
-        System.out.println("PATCH request at /books/" + id +", body: " + book);
+        System.out.println("PATCH request at /books/" + id + ", body: " + book);
         try {
             dao.updateFields(book, id);
             return new ResponseEntity(HttpStatus.OK);

@@ -177,7 +177,7 @@ public class DAOUtils {
 
             /* build query by using param name and value */
             paramArr = param.split(":");
-            if(paramArr[0].equals("price")){
+            if (paramArr[0].equals("price")) {
                 sqlQuery += "price=" + paramArr[1];
             } else {
                 sqlQuery += "LOWER(" + paramArr[0] + ") LIKE LOWER('%"

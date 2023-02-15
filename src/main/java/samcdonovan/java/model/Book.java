@@ -80,16 +80,16 @@ public class Book {
     public String toString() {
         String bookString = "{";
 
-        if(this.id != 0) bookString += "'id'=" + this.id + ", ";
-        if(this.title != null) bookString += "'title'='" + this.title + "', ";
-        if(this.author != null) bookString += "'author'='" + this.author + "', ";
-        if(this.isbn != null) bookString += "'isbn'='" + this.isbn + "', ";
-        if(this.price != 0.0) bookString += "'price'  " + this.price;
+        if (this.id != 0) bookString += "'id'=" + this.id + ", ";
+        if (this.title != null) bookString += "'title'='" + this.title + "', ";
+        if (this.author != null) bookString += "'author'='" + this.author + "', ";
+        if (this.isbn != null) bookString += "'isbn'='" + this.isbn + "', ";
+        if (this.price != 0.0) bookString += "'price'  " + this.price;
 
         bookString += "}";
 
         /* remove comma and space from end of string if they exist */
-        if(bookString.charAt(bookString.length() - 3) == ',')
+        if (bookString.charAt(bookString.length() - 3) == ',')
             bookString = bookString.substring(0, bookString.length() - 3)
                     + bookString.substring(bookString.length() - 1, bookString.length());
 
