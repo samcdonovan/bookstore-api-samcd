@@ -110,6 +110,33 @@ public class AppTest {
     }
 
     @Test
+    @Order(4)
+    @DisplayName("GET path /books?isbn={isbn}; retrieves documents containing given ISBN")
+    public void getPathRetrievesBooksWithGivenIsbn() throws Exception {
+
+        mockMvc.perform(get("/books?isbn=9780261103570"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].isbn", is("9780261103570")));
+    }
+
+    @Test
+    @Order(4)
+    @DisplayName("GET path /books?title={title}&author={author}; retrieves documents containing given title and author")
+    public void getRetrievesBookWithTitleAndAuthor() throws Exception {
+
+        mockMvc.perform(get("/books?title=the*author=george"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(3)))
+                .andExpect(jsonPath("$[0].title", containsString("The")))
+                .andExpect(jsonPath("$[0].author", containsString("George")))
+                .andExpect(jsonPath("$[1].title", containsString("The")))
+                .andExpect(jsonPath("$[0].title", containsString("George")));
+    }
+
+    @Test
     @Order(5)
     @DisplayName("PUT path /books/{id}; updates document with given ID")
     public void putPathCorrectlyUpdates() throws Exception {
