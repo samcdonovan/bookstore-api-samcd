@@ -25,10 +25,8 @@ public class DAOUtils {
      * @throws SQLException
      */
     public static void newConnection(DAO dao) throws SQLException {
-
         /* setup H2 connection using credentials */
         dao.setConnection(DriverManager.getConnection(jdbcURL, username, password));
-        System.out.println("H2 connection established!");
     }
 
     /**

@@ -78,13 +78,13 @@ public class Book {
 
     @Override
     public String toString() {
-        String bookString = "";
+        String bookString = "{";
 
-        bookString += "ID = " + this.id + "\n";
-        bookString += "Title = " + this.title + "\n";
-        bookString += "Author = " + this.author + "\n";
-        bookString += "ISBN = " + this.isbn + "\n";
-        bookString += "Price = " + this.price + "\n";
+        if(this.id != 0) bookString += "'id'=" + this.id + ", ";
+        if(this.title != null) bookString += "'title'='" + this.title + "', ";
+        if(this.author != null) bookString += "'author'='" + this.author + "', ";
+        if(this.isbn != null) bookString += "'isbn'='" + this.isbn + "', ";
+        if(this.price != 0.0) bookString += "'price'  " + this.price + "}";
 
         return bookString;
     }

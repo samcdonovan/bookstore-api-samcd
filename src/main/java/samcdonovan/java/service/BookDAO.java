@@ -41,9 +41,8 @@ public class BookDAO implements DAO<Book> {
                 + book.getIsbn() + "', " + book.getPrice() + ")";
 
         try {
+            /* execute query */
             DAOUtils.executeUpdate(this, query);
-            //book.setId(executedStatement.getGeneratedKeys().getInt(0));
-
         } catch (Exception exception) {
             System.out.println(exception);
         } finally {

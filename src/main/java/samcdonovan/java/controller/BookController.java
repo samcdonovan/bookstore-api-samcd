@@ -33,6 +33,7 @@ public class BookController {
     @PostMapping("/books")
     public ResponseEntity<HttpStatus> addBook(@RequestBody Book book) {
 
+        System.out.println("POST request at /books, body: " + book);
         try {
             dao.insert(book);
             return new ResponseEntity<>(HttpStatus.CREATED);
@@ -57,13 +58,25 @@ public class BookController {
     public ResponseEntity<List<Book>> getBooks(@RequestParam(required = false) String title,
                                                @RequestParam(required = false) String author,
                                                @RequestParam(required = false) String isbn) {
+
         List<Book> bookList = new ArrayList<>();
+        String message = "GET request at /books?";
 
         /* if the respective param exists, append the param name to it */
-        if (title != null) title = "title:" + title;
-        if (author != null) author = "author:" + author;
-        if (isbn != null) isbn = "isbn:" + isbn;
+        if (title != null) {
+            title = "title:" + title;
+            message += "title=" + title;
+        }
+        if (author != null) {
+            author = "author:" + author;
+            message += "author=" + author;
+        }
+        if (isbn != null) {
+            isbn = "isbn:" + isbn;
+            message += "isbn=" + isbn;
+        }
 
+        System.out.println(message); // print message to console
         try {
 
             /* if all parameters are null, retrieve all books from database */
@@ -88,6 +101,7 @@ public class BookController {
      */
     @GetMapping("/books/{id}")
     public ResponseEntity<List<Book>> getBook(@PathVariable Integer id) {
+        System.out.println("GET request at books/" + id);
         Book book = null;
         try {
             book = dao.get(id);
@@ -114,6 +128,7 @@ public class BookController {
      */
     @PutMapping("/books/{id}")
     public ResponseEntity<HttpStatus> updateBookByPut(@RequestBody Book book, @PathVariable("id") Integer id) {
+        System.out.println("PUT request at /books/" + id +", body: " + book);
         try {
             dao.updateDocument(book, id);
             return new ResponseEntity(HttpStatus.OK);
@@ -132,6 +147,7 @@ public class BookController {
      */
     @PatchMapping("/books/{id}")
     public ResponseEntity<HttpStatus> updateBookByPatch(@RequestBody Book book, @PathVariable("id") Integer id) {
+        System.out.println("PATCH request at /books/" + id +", body: " + book);
         try {
             dao.updateFields(book, id);
             return new ResponseEntity(HttpStatus.OK);
@@ -149,6 +165,7 @@ public class BookController {
      */
     @DeleteMapping("/books/{id}")
     public ResponseEntity<Book> deleteBook(@PathVariable("id") Integer id) {
+        System.out.println("DELETE request at /books/" + id);
         try {
             boolean success = dao.delete(id);
             if (success) {
@@ -169,6 +186,7 @@ public class BookController {
      */
     @DeleteMapping("/books")
     public ResponseEntity<HttpStatus> deleteAllBooks() {
+        System.out.println("PUT request at /books");
         try {
             dao.deleteAll();
             return new ResponseEntity<>(HttpStatus.OK);
