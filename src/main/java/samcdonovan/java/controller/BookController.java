@@ -49,29 +49,19 @@ public class BookController {
      */
     @GetMapping(value = "/books")
     public ResponseEntity<List<Book>> getBooks(
-    @RequestParam(required = false) String title, @RequestParam(required = false) String author) {
+            @RequestParam(required = false) String title, @RequestParam(required = false) String author,
+            @RequestParam(required = false) String isbn) {
         List<Book> bookList = new ArrayList<>();
 
-        if (title == null && author == null){
-            try {
-                bookList = dao.getAll();
-                if (bookList.size() > 0) {
-                    return ResponseEntity.ok(bookList);
-                } else {
-                    return new ResponseEntity<>(bookList, HttpStatus.NO_CONTENT);
-                }
-            } catch (Exception exception) {
-                System.out.println(exception);
-                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
-
-        if(title != null) title = "title:" + title;
-        if(author != null) author = "author:" + author;
+        if (title != null) title = "title:" + title;
+        if (author != null) author = "author:" + author;
+        if (isbn != null) isbn = "isbn:" + isbn;
 
         try {
-            System.out.println(title + "  " + author);
-            bookList = dao.get(title, author);
+
+            if (title == null && author == null && isbn == null) bookList = dao.getAll();
+            else bookList = dao.get(title, author, isbn);
+
             return new ResponseEntity<>(bookList, HttpStatus.OK);
         } catch (Exception exception) {
             System.out.println(exception);
