@@ -39,6 +39,12 @@ GET
 - `/books?author={author}`
   - `/books?author=George` - Retrieves all books with author fields containing 'George'
   - `/books?author=Neil%20Gaiman` - Retrieves all books with author fields containing 'Neil Gaiman'
+- `/books?isbn={isbn}`
+  - `/books?isbn=9780261103569` - Retrieves the book with ISBN 9780261103569
+  - `/books?isbn=9780261103569` - Retrieves all books that contain 978026110 in their ISBN
+- These parameters can also be used in combination with each other e.g.:
+  - `/books?title=the&author=george` - Retrieves all books with 'the' in the title and 'george' in the author
+  - `/books?title=two&author=tolkien&isbn=9780261103580` - Retrieves all books with 'two' in the title, 'tolkien' in the author and '9780261103580' in the isbn
 ### UPDATE<a name = "update"></a>
 PUT
 - `/books{id}`
@@ -74,7 +80,8 @@ PATCH
 DELETE
 - `/books` - Deletes ALL books from the 'books' table
 - `/books/{id}` 
-  - `/books/6` - Deletes book with ID of 6
+  - `/books/6` - Deletes book with ID 6
+  - `/books/1` - Deletes book with ID 1
 
 ## Tools and dependencies<a name = "built_using"></a>
 - [Maven](https://maven.apache.org/): Managing the project with dependencies, running tests and packaging into an executable file. 
