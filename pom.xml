@@ -72,68 +72,10 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>samcdonovan.java.ApplicationRunner</mainClass>
-                        </manifest>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <appendAssemblyId>false</appendAssemblyId>
-                    <outputDirectory>../</outputDirectory>
+                    <outputDirectory>./</outputDirectory>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
-            <!-- launch4j exe packaging -->
-            <!--<plugin>
-                <groupId>com.akathist.maven.plugins.launch4j</groupId>
-                <artifactId>launch4j-maven-plugin</artifactId>
-                <version>2.3.0</version>
-                <executions>
-                    <execution>
-                        <id>l4j-gui</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>launch4j</goal>
-                        </goals>
-                        <configuration>
-                            <headerType>gui</headerType>
-                            <outfile>BookstoreAPI.exe</outfile>
-                            <jar>target/${project.artifactId}-${project.version}.jar</jar>
-                            <dontWrapJar>false</dontWrapJar>
-                            <errTitle>Error in launch4j plugin</errTitle>
-                            <classPath>
-                                <mainClass>samcdonovan.java.ApplicationRunner</mainClass>
-                            </classPath>
-                            <icon>src/main/resources/favicon.ico</icon>
-                            <jre>
-                                <path>${java.home}</path>
-                            </jre>
-                            <versionInfo>
-                                <fileVersion>1.0.0.0</fileVersion>
-                                <txtFileVersion>1.0.0.0</txtFileVersion>
-                                <productVersion>1.0.0.0</productVersion>
-                                <productName>BookstoreAPI</productName>
-                                <internalName>BookstoreAPI</internalName>
-                                <originalFilename>BookstoreAPI.exe</originalFilename>
-                            </versionInfo>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>-->
         </plugins>
     </build>
 
