@@ -45,7 +45,7 @@ This will use the docker-compose file to build the image and container, and star
  ```
 Run the command below to stop and remove the containers from Docker.
  ```
-$> docker-compsoe down
+$> docker-compose down
  ```
 ### After the app is running
 Spring Boot can take some time to get the app up and running, and will print messages to the console/command line while it is setting up. The API will be ready to use on localhost:3000 when you see the following message:
