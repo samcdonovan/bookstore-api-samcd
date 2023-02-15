@@ -90,7 +90,6 @@ DELETE
 - [JUnit 5](https://junit.org/junit5/): Unit testing for the API endpoints.
 -	[Spring Test](https://docs.spring.io/spring-boot/docs/2.1.5.RELEASE/reference/html/boot-features-testing.html): Ran a mock Spring application for testing the API endpoints; [MockMvc](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/test/web/servlet/MockMvc.html) specifically handled test requests to the API and assertions on the data retrieved. 
 - [Jackson databind](https://github.com/FasterXML/jackson-databind): Converted Book objects into JSON format for testing API paths.
--	[launch4j](https://launch4j.sourceforge.net/): Packaging the project into a .exe file (may remove in favour of .jar packaging)
 
 ## Author <a name = "authors"></a>
 - [@samcdonovan](https://github.com/samcdonovan)
