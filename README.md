@@ -60,15 +60,15 @@ PUT
     ```
 
 PATCH
-- /books/{id}
-  - /books/2 - Updates book with ID 2 with new fields
+- `/books/{id}`
+  - `/books/2` - Updates book with ID 2 with new fields
     - JSON example:
     ```JSON
     {
     "title": "Example PATCH title"
     }
     ```
-  - /books/4 - Updates book with ID 4 with new fields
+  - `/books/4` - Updates book with ID 4 with new fields
     - JSON example:
     ```JSON
     {

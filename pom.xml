@@ -13,7 +13,7 @@
 
     <groupId>samcdonovan.java</groupId>
     <artifactId>frogAPI</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>frogAPI</name>
     <description>RESTful API for Frog bookstore</description>
     <properties>
