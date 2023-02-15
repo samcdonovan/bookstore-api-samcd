@@ -86,6 +86,9 @@ GET
 - `/books?isbn={isbn}`
   - `/books?isbn=9780261103569` - Retrieves the book with ISBN 9780261103569
   - `/books?isbn=9780261103569` - Retrieves all books that contain 978026110 in their ISBN
+- `/books?price={price}`
+  - `/books?price=6.5` - Retrievs all books with a price of 6.5
+  - `/books?price=2` - Retrievs all books with a price of 2.0
 - These parameters can also be used in combination with each other e.g.:
   - `/books?title=the&author=george` - Retrieves all books with 'the' in the title and 'george' in the author
   - `/books?title=two&author=tolkien&isbn=9780261103580` - Retrieves all books with 'two' in the title, 'tolkien' in the author and '9780261103580' in the isbn
