@@ -14,11 +14,11 @@ public interface DAO <T> {
 
     Connection getConnection();
 
+    List<T> getAll() throws SQLException;
+
     T get(int id) throws SQLException;
 
-    //T get(T t) throws SQLException;
-
-    List<T> getAll() throws SQLException;
+    List<T> get(String... t) throws SQLException;
 
     void insert(T t) throws SQLException;
 

@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Data Access Object for Books
  */
-public class BookDAO implements DAO <Book> {
+public class BookDAO implements DAO<Book> {
 
     private Connection connection; // SQL connection variable
 
@@ -20,12 +20,12 @@ public class BookDAO implements DAO <Book> {
     public BookDAO() {
     }
 
-    public void setConnection(Connection connection){
-        this.connection = connection;
+    public Connection getConnection() {
+        return this.connection;
     }
 
-    public Connection getConnection(){
-        return this.connection;
+    public void setConnection(Connection connection) {
+        this.connection = connection;
     }
 
     /**
@@ -104,14 +104,26 @@ public class BookDAO implements DAO <Book> {
     /**
      * Retrieves all books that contain the specified author name
      *
-     * @param author The author of the book
+     * @param params The query parameters passed into the GET path
      * @return List A list of all the books with author fields containing the specified author
      */
-    public List<Book> findByAuthor(String author) throws SQLException {
+    public List<Book> get(String... params) throws SQLException {
 
-        ResultSet resultSet = DAOUtils.executeQuery(this, "SELECT * FROM books " +
-                "WHERE LOWER(author) LIKE LOWER('%" + author + "%')");
+        String sqlQuery = "SELECT * FROM books WHERE ";
 
+        String[] paramArr;
+        int paramCount = 0;
+        for (String param : params) {
+            paramArr = param.split(":");
+            sqlQuery += "LOWER(" + paramArr[0] + ") LIKE LOWER('%"
+                    + paramArr[1] + "%')";
+
+            if (paramCount >= 0 && paramCount < params.length - 1) sqlQuery += " AND ";
+            paramCount++;
+        }
+
+        System.out.println(sqlQuery);
+        ResultSet resultSet = DAOUtils.executeQuery(this, sqlQuery);
         Book book = new Book();
         List<Book> bookList = new ArrayList<>();
 
@@ -140,6 +152,29 @@ public class BookDAO implements DAO <Book> {
 
         ResultSet resultSet = DAOUtils.executeQuery(this, "SELECT * FROM books " +
                 "WHERE LOWER(title) LIKE LOWER('%" + title + "%')");
+
+        Book book = new Book();
+        List<Book> bookList = new ArrayList<>();
+
+        try {
+            while (resultSet.next()) {
+
+                book = DAOUtils.mapToBook(resultSet);
+                bookList.add(book);
+            }
+        } catch (Exception exception) {
+            System.out.println(exception);
+        } finally {
+            this.connection.close();
+        }
+
+        return bookList;
+    }
+
+    public List<Book> findByAuthor(String author) throws SQLException {
+
+        ResultSet resultSet = DAOUtils.executeQuery(this, "SELECT * FROM books " +
+                "WHERE LOWER(author) LIKE LOWER('%" + author + "%')");
 
         Book book = new Book();
         List<Book> bookList = new ArrayList<>();

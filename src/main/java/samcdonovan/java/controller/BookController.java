@@ -1,13 +1,17 @@
 package samcdonovan.java.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.fasterxml.jackson.databind.ObjectMapper; // necessary otherwise 406 status code
 import samcdonovan.java.model.Book;
 import samcdonovan.java.service.BookDAO;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Spring Boot Rest Controller for handling and
@@ -43,13 +47,13 @@ public class BookController {
      *
      * @return List A list containing all the books in the database
      */
-    @GetMapping("/books")
+    @GetMapping(value ="/books")
     public ResponseEntity<List<Book>> getBooks() {
         List<Book> bookList = new ArrayList<>();
         try {
             bookList = dao.getAll();
             if (bookList.size() > 0) {
-                return new ResponseEntity<>(bookList, HttpStatus.OK);
+                return ResponseEntity.ok(bookList);
             } else {
                 return new ResponseEntity<>(bookList, HttpStatus.NO_CONTENT);
             }
@@ -87,18 +91,34 @@ public class BookController {
      * @param author The author to search for
      * @return ResponseEntity Containing a list of all books by the author and a HTTP status code for the request
      */
-    @GetMapping(value = "/books", params = "author")
-    public ResponseEntity<List<Book>> getBooksByAuthor(@RequestParam String author) {
+    /*@GetMapping(value = "/books", params = {"title", "author"})
+    @ResponseBody
+    public List<Book> getBooksByAuthor(@RequestParam String title, @RequestParam String author) {
+
+        //if(!title.isPresent() && !author.isPresent()) return getBooks();
+
         List<Book> bookList = new ArrayList<>();
+
+        /*if(!title.isEmpty()) title = Optional.of("title:" + title.get());
+        if(!author.isEmpty()) author = Optional.of("author:" + author.get());
+*//*
         try {
-            bookList = dao.findByAuthor(author);
-            return new ResponseEntity<>(bookList, HttpStatus.OK);
+            bookList = dao.get("title:" + title, "author:" + author);
+            System.out.println(bookList);
+            //return new ResponseEntity<>(bookList, HttpStatus.OK);
+            try {
+                return bookList;
+            } catch (Exception exception){
+                System.out.println(exception);
+                return null;
+            }
         } catch (Exception exception) {
             System.out.println(exception);
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            //return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return null;
         }
     }
-
+*/
     /**
      * GET path for books with a specific title
      *
@@ -110,7 +130,19 @@ public class BookController {
     public ResponseEntity<List<Book>> getBooksByTitle(@RequestParam String title) {
         List<Book> bookList = new ArrayList<>();
         try {
-            bookList = dao.findByTitle(title);
+            bookList = dao.findByTitle( title);
+            return new ResponseEntity<>(bookList, HttpStatus.OK);
+        } catch (Exception exception) {
+            System.out.println(exception);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(value = "/books", params = "author")
+    public ResponseEntity<List<Book>> getBooksByAuthor(@RequestParam String author) {
+        List<Book> bookList = new ArrayList<>();
+        try {
+            bookList = dao.findByAuthor( author);
             return new ResponseEntity<>(bookList, HttpStatus.OK);
         } catch (Exception exception) {
             System.out.println(exception);
