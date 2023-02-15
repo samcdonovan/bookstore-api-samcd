@@ -15,13 +15,43 @@
 - [Authors](#authors)
 
 ## Setup<a name = "setup"></a>
-### Install and run through command line
+### Download / clone repository
+#### Command Line:
+The below commands will clone the repository in your current working directory and then cd (change directory) into the API directory.
  ```
  git clone https://github.com/samcdonovan/bookstore-api-samcd.git
  cd bookstore-api-samcd
- java -jar .\bookstore-api-1.0.0.jar
+ ```
+Below there are 3 options for running this application.
+### Run directly in command line
+This will run the executable .jar file using Java.
+ ```
+java -jar .\bookstore-api-1.0.0.jar
  ```
 
+### Run using Docker
+This will build the 'docker-bookstore-api' container using the Dockerfile and then start the app, mapping the port to 3000.
+ ```
+ $> docker build --tag=docker-bookstore-api:latest .
+ $> docker run -p 3000:3000 docker-bookstore-api:latest
+ ```
+
+### Run using docker-compose
+This will use the docker-compose file to build the image and container, and start the app.
+ ```
+ $> docker-compose up --build
+ ```
+Run the command below to stop and remove the containers from Docker.
+ ```
+$> docker-compsoe down
+ ```
+### After the app is running
+Spring Boot can take some time to get the app up and running, and will print messages to the console/command line while it is setting up. The API will be ready to use on localhost:3000 when you see the following message:
+ ```
+ ---------------------------------------
+Application has started at:
+localhost:3000/books
+ ```
 ## API Endpoints<a name = "endpoints"></a>
 Below are the endpoints for the API, with some examples. If the example is a URL, '%20' represents a space in the string.
 ### CREATE<a name = "create"></a>
