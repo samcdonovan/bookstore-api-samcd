@@ -43,9 +43,15 @@ public class BookController {
     }
 
     /**
-     * GET path for all books
+     * GET path with optional parameters; if no parameters are passed,
+     * it retrieves all books from the database, otherwise it performs a search
+     * based on the parameters that were passed.
      *
-     * @return List A list containing all the books in the database
+     * @param title The title to search for
+     * @param author The author to search for
+     * @param isbn The ISBN to search for
+     * @return ResponseEntity containing the list of books from the database and
+     * a HTTP status code for the request
      */
     @GetMapping(value = "/books")
     public ResponseEntity<List<Book>> getBooks(
@@ -90,71 +96,6 @@ public class BookController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    /**
-     * GET path for books by a specific author
-     *
-     * @param author The author to search for
-     * @return ResponseEntity Containing a list of all books by the author and a HTTP status code for the request
-     */
-   /* @GetMapping(value = "/books")
-    @ResponseBody
-    public ResponseEntity<List<Book>> getBooksByAuthor
-    (@RequestParam(required = false) String title, @RequestParam(required = true) String author) {
-
-        System.out.println(title + "  " + author);
-        if (title.isEmpty() && author.isEmpty()) return getBooks();
-
-        List<Book> bookList = new ArrayList<>();
-
-        if(!title.isEmpty()) title = "title:" + title;
-        if(!author.isEmpty()) author = "author:" + author;
-
-        System.out.println(title + "  " + author);
-        try {
-            //bookList = dao.get("title:" + title, "author:" + author);
-            System.out.println(title + "  " + author);
-            bookList = dao.get(title, author);
-            return new ResponseEntity<>(bookList, HttpStatus.OK);
-        } catch (Exception exception) {
-            System.out.println(exception);
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-*/
-
-    /**
-     * GET path for books with a specific title
-     *
-     * @param title The author to search for
-     * @return ResponseEntity Containing a list of all books containing the
-     * given title and a HTTP status code for the request
-     */
-   /*@GetMapping(value = "/books", params = "title")
-    public ResponseEntity<List<Book>> getBooksByTitle(@RequestParam String title) {
-        List<Book> bookList = new ArrayList<>();
-        try {
-            bookList = dao.get("title:" + title);
-            return new ResponseEntity<>(bookList, HttpStatus.OK);
-        } catch (Exception exception) {
-            System.out.println(exception);
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }*/
-
-    /*@GetMapping(value = "/books", params = "author")
-    public ResponseEntity<List<Book>> getBooksByAuthor(@RequestParam String author) {
-        List<Book> bookList = new ArrayList<>();
-        try {
-            bookList = dao.get("author:" + author);
-            return new ResponseEntity<>(bookList, HttpStatus.OK);
-        } catch (Exception exception) {
-            System.out.println(exception);
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-    */
-
 
     /**
      * PUT path for updating the book with the specified ID
