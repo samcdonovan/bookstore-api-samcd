@@ -14,6 +14,8 @@
 - [Tools and dependencies](#built_using)
 - [Authors](#authors)
 
+
+---
 ## Setup<a name = "setup"></a>
 ### Download / clone repository
 #### Command Line:
@@ -52,6 +54,9 @@ Spring Boot can take some time to get the app up and running, and will print mes
 Application has started at:
 localhost:3000/books
  ```
+
+---
+
 ## API Endpoints<a name = "endpoints"></a>
 Below are the endpoints for the API, with some examples. If the example is a URL, '%20' represents a space in the string.
 ### CREATE<a name = "create"></a>
@@ -122,6 +127,7 @@ DELETE
   - `/books/6` - Deletes book with ID 6
   - `/books/1` - Deletes book with ID 1
 
+---
 ## Tools and dependencies<a name = "built_using"></a>
 - [Maven](https://maven.apache.org/): Managing the project with dependencies, running tests and packaging into an executable file. 
 - [Spring Boot](https://spring.io/): Ran a Spring application which handled mapping API requests to their respective paths.
@@ -130,5 +136,6 @@ DELETE
 -	[Spring Test](https://docs.spring.io/spring-boot/docs/2.1.5.RELEASE/reference/html/boot-features-testing.html): Ran a mock Spring application for testing the API endpoints; [MockMvc](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/test/web/servlet/MockMvc.html) specifically handled test requests to the API and assertions on the data retrieved. 
 - [Jackson databind](https://github.com/FasterXML/jackson-databind): Converted Book objects into JSON format for testing API paths.
 
+---
 ## Author <a name = "authors"></a>
 - [@samcdonovan](https://github.com/samcdonovan)
