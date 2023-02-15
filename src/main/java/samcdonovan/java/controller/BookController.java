@@ -68,7 +68,8 @@ public class BookController {
             if (title == null && author == null && isbn == null) bookList = dao.getAll();
             else bookList = dao.get(title, author, isbn);
 
-            return new ResponseEntity<>(bookList, HttpStatus.OK);
+            if(bookList.size() > 0) return new ResponseEntity<>(bookList, HttpStatus.OK);
+            else return new ResponseEntity<>(bookList, HttpStatus.NO_CONTENT);
         } catch (Exception exception) {
             System.out.println(exception);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

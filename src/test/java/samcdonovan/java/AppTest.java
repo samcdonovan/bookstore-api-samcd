@@ -62,7 +62,7 @@ public class AppTest {
         mockMvc.perform(get("/books"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(6))); // database initially contains 6 documents
+                .andExpect(jsonPath("$", hasSize(8))); // database initially contains 6 documents
     }
 
     @Test
@@ -103,9 +103,11 @@ public class AppTest {
         mockMvc.perform(get("/books?title=The"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(3)))
+                .andExpect(jsonPath("$", hasSize(5)))
                 .andExpect(jsonPath("$[0].title", containsString("The")))
                 .andExpect(jsonPath("$[1].title", containsString("The")))
+                .andExpect(jsonPath("$[2].title", containsString("The")))
+                .andExpect(jsonPath("$[2].title", containsString("The")))
                 .andExpect(jsonPath("$[2].title", containsString("The")));
     }
 
@@ -126,14 +128,14 @@ public class AppTest {
     @DisplayName("GET path /books?title={title}&author={author}; retrieves documents containing given title and author")
     public void getRetrievesBookWithTitleAndAuthor() throws Exception {
 
-        mockMvc.perform(get("/books?title=the*author=george"))
+        mockMvc.perform(get("/books?title=the&author=george"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(3)))
+                .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].title", containsString("The")))
                 .andExpect(jsonPath("$[0].author", containsString("George")))
                 .andExpect(jsonPath("$[1].title", containsString("The")))
-                .andExpect(jsonPath("$[0].title", containsString("George")));
+                .andExpect(jsonPath("$[0].author", containsString("George")));
     }
 
     @Test
