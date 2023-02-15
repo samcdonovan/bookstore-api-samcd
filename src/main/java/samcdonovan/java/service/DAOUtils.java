@@ -6,7 +6,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.*;
+import java.util.ArrayList;
 
 /**
  * Utitlty class for DAOs; contains helper functions related to database operations.
@@ -126,13 +126,13 @@ public class DAOUtils {
     }
 
     /**
-     * Builds an update query based on the fields passed through the book object
+     * Builds an UDPATE query based on the fields passed through the book object
      *
      * @param book The fields to update the database with
      * @param id The ID of the book to be updated
      * @return String containing the SQL query
      */
-    public static String buildQuery(Book book, int id){
+    public static String buildUpdateQuery(Book book, int id){
         String sqlQuery = "UPDATE books SET ";
         boolean[] isFirst = {true};
 
@@ -144,5 +144,36 @@ public class DAOUtils {
         sqlQuery += " WHERE id=" + id;
 
         return sqlQuery;
+    }
+
+    /**
+     * Builds a SELECT query based on the fields passed through the book object
+     *
+     * @param params String array containing all the parameters
+     * @return String containing the SQL query
+     */
+    public static String buildSelectQuery(String... params){
+        String sqlQuery = "SELECT * FROM books WHERE ";
+
+        String[] paramArr;
+        int paramCount = 0;
+
+        ArrayList<String> paramList = new ArrayList<String>();
+        for (String param : params) {
+            if (param!= null) paramList.add(param);
+        }
+
+        for (String param : paramList) {
+
+            paramArr = param.split(":");
+            sqlQuery += "LOWER(" + paramArr[0] + ") LIKE LOWER('%"
+                    + paramArr[1] + "%')";
+
+            if (paramCount >= 0 && paramCount < paramList.size() - 1) sqlQuery += " AND ";
+            paramCount++;
+        }
+
+        return sqlQuery;
+
     }
 }

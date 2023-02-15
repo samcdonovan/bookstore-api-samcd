@@ -1,7 +1,6 @@
 package samcdonovan.java.service;
 
 import samcdonovan.java.model.Book;
-import samcdonovan.java.service.DAOUtils;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -109,27 +108,8 @@ public class BookDAO implements DAO<Book> {
      */
     public List<Book> get(String... params) throws SQLException {
 
-        String sqlQuery = "SELECT * FROM books WHERE ";
-
-        String[] paramArr;
-        int paramCount = 0;
-
-        ArrayList<String> paramList = new ArrayList<String>();
-        for (String param : params) {
-            if (param!= null) paramList.add(param);
-        }
-
-        for (String param : paramList) {
-
-            paramArr = param.split(":");
-            sqlQuery += "LOWER(" + paramArr[0] + ") LIKE LOWER('%"
-                    + paramArr[1] + "%')";
-
-            if (paramCount >= 0 && paramCount < paramList.size() - 1) sqlQuery += " AND ";
-            paramCount++;
-        }
-
-        System.out.println(sqlQuery);
+        String sqlQuery = DAOUtils.buildSelectQuery(params);
+        
         ResultSet resultSet = DAOUtils.executeQuery(this, sqlQuery);
         Book book = new Book();
         List<Book> bookList = new ArrayList<>();
@@ -178,7 +158,7 @@ public class BookDAO implements DAO<Book> {
      * @throws SQLException
      */
     public Book updateFields(Book book, int id) throws SQLException {
-        String sqlQuery = DAOUtils.buildQuery(book, id);
+        String sqlQuery = DAOUtils.buildUpdateQuery(book, id);
 
         DAOUtils.execute(this, sqlQuery);
 
