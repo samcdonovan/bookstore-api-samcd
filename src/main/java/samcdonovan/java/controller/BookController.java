@@ -48,15 +48,31 @@ public class BookController {
      * @return List A list containing all the books in the database
      */
     @GetMapping(value = "/books")
-    public ResponseEntity<List<Book>> getBooks() {
+    public ResponseEntity<List<Book>> getBooks(
+    @RequestParam(required = false) String title, @RequestParam(required = false) String author) {
         List<Book> bookList = new ArrayList<>();
-        try {
-            bookList = dao.getAll();
-            if (bookList.size() > 0) {
-                return ResponseEntity.ok(bookList);
-            } else {
-                return new ResponseEntity<>(bookList, HttpStatus.NO_CONTENT);
+
+        if (title == null && author == null){
+            try {
+                bookList = dao.getAll();
+                if (bookList.size() > 0) {
+                    return ResponseEntity.ok(bookList);
+                } else {
+                    return new ResponseEntity<>(bookList, HttpStatus.NO_CONTENT);
+                }
+            } catch (Exception exception) {
+                System.out.println(exception);
+                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
             }
+        }
+
+        if(title != null) title = "title:" + title;
+        if(author != null) author = "author:" + author;
+
+        try {
+            System.out.println(title + "  " + author);
+            bookList = dao.get(title, author);
+            return new ResponseEntity<>(bookList, HttpStatus.OK);
         } catch (Exception exception) {
             System.out.println(exception);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -91,31 +107,28 @@ public class BookController {
      * @param author The author to search for
      * @return ResponseEntity Containing a list of all books by the author and a HTTP status code for the request
      */
-    /*@GetMapping(value = "/books", params = {"title", "author"})
+   /* @GetMapping(value = "/books")
     @ResponseBody
-    public List<Book> getBooksByAuthor(@RequestParam String title, @RequestParam String author) {
+    public ResponseEntity<List<Book>> getBooksByAuthor
+    (@RequestParam(required = false) String title, @RequestParam(required = true) String author) {
 
-        //if(!title.isPresent() && !author.isPresent()) return getBooks();
+        System.out.println(title + "  " + author);
+        if (title.isEmpty() && author.isEmpty()) return getBooks();
 
         List<Book> bookList = new ArrayList<>();
 
-        /*if(!title.isEmpty()) title = Optional.of("title:" + title.get());
-        if(!author.isEmpty()) author = Optional.of("author:" + author.get());
-*//*
+        if(!title.isEmpty()) title = "title:" + title;
+        if(!author.isEmpty()) author = "author:" + author;
+
+        System.out.println(title + "  " + author);
         try {
-            bookList = dao.get("title:" + title, "author:" + author);
-            System.out.println(bookList);
-            //return new ResponseEntity<>(bookList, HttpStatus.OK);
-            try {
-                return bookList;
-            } catch (Exception exception){
-                System.out.println(exception);
-                return null;
-            }
+            //bookList = dao.get("title:" + title, "author:" + author);
+            System.out.println(title + "  " + author);
+            bookList = dao.get(title, author);
+            return new ResponseEntity<>(bookList, HttpStatus.OK);
         } catch (Exception exception) {
             System.out.println(exception);
-            //return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-            return null;
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 */
@@ -127,7 +140,7 @@ public class BookController {
      * @return ResponseEntity Containing a list of all books containing the
      * given title and a HTTP status code for the request
      */
-    @GetMapping(value = "/books", params = "title")
+   /*@GetMapping(value = "/books", params = "title")
     public ResponseEntity<List<Book>> getBooksByTitle(@RequestParam String title) {
         List<Book> bookList = new ArrayList<>();
         try {
@@ -137,9 +150,9 @@ public class BookController {
             System.out.println(exception);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
+    }*/
 
-    @GetMapping(value = "/books", params = "author")
+    /*@GetMapping(value = "/books", params = "author")
     public ResponseEntity<List<Book>> getBooksByAuthor(@RequestParam String author) {
         List<Book> bookList = new ArrayList<>();
         try {
@@ -150,6 +163,8 @@ public class BookController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    */
+
 
     /**
      * PUT path for updating the book with the specified ID

@@ -113,12 +113,19 @@ public class BookDAO implements DAO<Book> {
 
         String[] paramArr;
         int paramCount = 0;
+
+        ArrayList<String> paramList = new ArrayList<String>();
         for (String param : params) {
+            if (param!= null) paramList.add(param);
+        }
+
+        for (String param : paramList) {
+
             paramArr = param.split(":");
             sqlQuery += "LOWER(" + paramArr[0] + ") LIKE LOWER('%"
                     + paramArr[1] + "%')";
 
-            if (paramCount >= 0 && paramCount < params.length - 1) sqlQuery += " AND ";
+            if (paramCount >= 0 && paramCount < paramList.size() - 1) sqlQuery += " AND ";
             paramCount++;
         }
 
