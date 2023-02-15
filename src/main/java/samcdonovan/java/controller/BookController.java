@@ -47,7 +47,7 @@ public class BookController {
      *
      * @return List A list containing all the books in the database
      */
-    @GetMapping(value ="/books")
+    @GetMapping(value = "/books")
     public ResponseEntity<List<Book>> getBooks() {
         List<Book> bookList = new ArrayList<>();
         try {
@@ -119,6 +119,7 @@ public class BookController {
         }
     }
 */
+
     /**
      * GET path for books with a specific title
      *
@@ -130,7 +131,7 @@ public class BookController {
     public ResponseEntity<List<Book>> getBooksByTitle(@RequestParam String title) {
         List<Book> bookList = new ArrayList<>();
         try {
-            bookList = dao.findByTitle( title);
+            bookList = dao.get("title:" + title);
             return new ResponseEntity<>(bookList, HttpStatus.OK);
         } catch (Exception exception) {
             System.out.println(exception);
@@ -142,7 +143,7 @@ public class BookController {
     public ResponseEntity<List<Book>> getBooksByAuthor(@RequestParam String author) {
         List<Book> bookList = new ArrayList<>();
         try {
-            bookList = dao.findByAuthor( author);
+            bookList = dao.get("author:" + author);
             return new ResponseEntity<>(bookList, HttpStatus.OK);
         } catch (Exception exception) {
             System.out.println(exception);
@@ -173,7 +174,7 @@ public class BookController {
      * PATCH path for updating fields for a document in the database
      *
      * @param book The fields of the book to be updated
-     * @param id The ID of the book to be updated
+     * @param id   The ID of the book to be updated
      * @return ResponseEntity Containing a HTTP status code for the request
      */
     @PatchMapping("/books/{id}")
