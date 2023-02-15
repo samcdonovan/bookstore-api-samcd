@@ -87,14 +87,16 @@ public class BookController {
      * @return Book The book retrieved from the database
      */
     @GetMapping("/books/{id}")
-    public ResponseEntity<Book> getBook(@PathVariable Integer id) {
+    public ResponseEntity<List<Book>> getBook(@PathVariable Integer id) {
         Book book = null;
         try {
             book = dao.get(id);
+            List<Book> bookList = new ArrayList<>();
             if (book != null) {
-                return new ResponseEntity<>(book, HttpStatus.OK);
+                bookList.add(book);
+                return new ResponseEntity<>(bookList, HttpStatus.OK);
             } else {
-                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(bookList, HttpStatus.NOT_FOUND);
             }
         } catch (Exception exception) {
             System.out.println(exception);

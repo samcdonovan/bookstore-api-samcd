@@ -73,11 +73,11 @@ public class AppTest {
         mockMvc.perform(get("/books/2"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is(2)))
-                .andExpect(jsonPath("$.title", is("1984")))
-                .andExpect(jsonPath("$.author", is("George Orwell")))
-                .andExpect(jsonPath("$.isbn", is("9780261103569")))
-                .andExpect(jsonPath("$.price", is(5.0)));
+                .andExpect(jsonPath("$[0].id", is(2)))
+                .andExpect(jsonPath("$[0].title", is("1984")))
+                .andExpect(jsonPath("$[0].author", is("George Orwell")))
+                .andExpect(jsonPath("$[0].isbn", is("9780261103569")))
+                .andExpect(jsonPath("$[0].price", is(5.0)));
     }
 
     @Test
@@ -137,7 +137,7 @@ public class AppTest {
                 .andExpect(jsonPath("$[0].title", containsString("The")))
                 .andExpect(jsonPath("$[0].author", containsString("George")))
                 .andExpect(jsonPath("$[1].title", containsString("The")))
-                .andExpect(jsonPath("$[0].author", containsString("George")));
+                .andExpect(jsonPath("$[1].author", containsString("George")));
     }
 
     @Test
@@ -157,11 +157,11 @@ public class AppTest {
         /* check that book with ID 6 has been changed to the test book */
         mockMvc.perform(get("/books/6")).andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is(6)))
-                .andExpect(jsonPath("$.title", is("PutTestTitle")))
-                .andExpect(jsonPath("$.author", is("PutTestAuthor")))
-                .andExpect(jsonPath("$.isbn", is("000000000000")))
-                .andExpect(jsonPath("$.price", is(12.34)));
+                .andExpect(jsonPath("$[0].id", is(6)))
+                .andExpect(jsonPath("$[0].title", is("PutTestTitle")))
+                .andExpect(jsonPath("$[0].author", is("PutTestAuthor")))
+                .andExpect(jsonPath("$[0].isbn", is("000000000000")))
+                .andExpect(jsonPath("$[0].price", is(12.34)));
     }
 
     @Test
@@ -183,11 +183,11 @@ public class AppTest {
         /* check that the title field has been updated */
         mockMvc.perform(get("/books/3")).andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is(3)))
-                .andExpect(jsonPath("$.title", is("PatchTestTitle")))
-                .andExpect(jsonPath("$.author", is("J.R.R. Tolkien")))
-                .andExpect(jsonPath("$.isbn", is("9780261103580")))
-                .andExpect(jsonPath("$.price", is(6.5)));
+                .andExpect(jsonPath("$[0].id", is(3)))
+                .andExpect(jsonPath("$[0].title", is("PatchTestTitle")))
+                .andExpect(jsonPath("$[0].author", is("J.R.R. Tolkien")))
+                .andExpect(jsonPath("$[0].isbn", is("9780261103580")))
+                .andExpect(jsonPath("$[0].price", is(6.5)));
 
         /* update multiple fields */
         testBook.setAuthor("PatchTestAuthor");
@@ -203,11 +203,11 @@ public class AppTest {
         /* check that the books' fields reflect the new changes */
         mockMvc.perform(get("/books/3")).andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is(3)))
-                .andExpect(jsonPath("$.title", is("PatchTestTitle")))
-                .andExpect(jsonPath("$.author", is("PatchTestAuthor")))
-                .andExpect(jsonPath("$.isbn", is("2222222222222")))
-                .andExpect(jsonPath("$.price", is(6.5)));
+                .andExpect(jsonPath("$[0].id", is(3)))
+                .andExpect(jsonPath("$[0].title", is("PatchTestTitle")))
+                .andExpect(jsonPath("$[0].author", is("PatchTestAuthor")))
+                .andExpect(jsonPath("$[0].isbn", is("2222222222222")))
+                .andExpect(jsonPath("$[0].price", is(6.5)));
     }
 
     @Test
